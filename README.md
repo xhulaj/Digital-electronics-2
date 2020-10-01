@@ -1,1 +1,12 @@
 # Digital-electronics-2
+## Content
+* [Tools](https://github.com/xhulaj/Digital-electronics-2/tree/master/Labs/01-tools)
+* [Leds](https://github.com/xhulaj/Digital-electronics-2/tree/master/Labs/02-leds)
+* [GPio](https://github.com/xhulaj/Digital-electronics-2/tree/master/Labs/03-gpio)
+* [Interrupts](https://github.com/xhulaj/Digital-electronics-2/tree/master/Labs/04-interrupts)
+* [Segment](https://github.com/xhulaj/Digital-electronics-2/tree/master/Labs/05-segment)
+* [LCD](https://github.com/xhulaj/Digital-electronics-2/tree/master/Labs/06-lcd)
+* [Uart](https://github.com/xhulaj/Digital-electronics-2/tree/master/Labs/07-uart)
+* [Twi-scan](https://github.com/xhulaj/Digital-electronics-2/tree/master/Labs/08-twi_scan)
+* [ASM-random](https://github.com/xhulaj/Digital-electronics-2/tree/master/Labs/09-asm_random)
+* [PROJECT](https://github.com/xhulaj/Digital-electronics-2/tree/master/Labs/project)
