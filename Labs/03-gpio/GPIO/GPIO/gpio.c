@@ -13,12 +13,15 @@
 #include "gpio.h"
 
 /* Function definitions ----------------------------------------------*/
+
+/* GPIO_config_output */
 void GPIO_config_output(volatile uint8_t *reg_name, uint8_t pin_num)
 {
-    *reg_name = *reg_name | (1<<pin_num);
+    *reg_name = *reg_name | (1<<pin_num); // Configurate output in register on given pin
 }
 
 /*--------------------------------------------------------------------*/
+
 /* GPIO_config_input_nopull */
 void GPIO_config_input_nopull(volatile uint8_t *reg_name, uint8_t pin_num)
 {
@@ -28,6 +31,8 @@ void GPIO_config_input_nopull(volatile uint8_t *reg_name, uint8_t pin_num)
 }
 
 /*--------------------------------------------------------------------*/
+
+/* GPIO_config_input_pullup */
 void GPIO_config_input_pullup(volatile uint8_t *reg_name, uint8_t pin_num)
 {
     *reg_name = *reg_name & ~(1<<pin_num);  // Data Direction Register
@@ -36,9 +41,11 @@ void GPIO_config_input_pullup(volatile uint8_t *reg_name, uint8_t pin_num)
 }
 
 /*--------------------------------------------------------------------*/
+
+/* GPIO_write_low */
 void GPIO_write_low(volatile uint8_t *reg_name, uint8_t pin_num)
 {
-    *reg_name = *reg_name & ~(1<<pin_num);
+    *reg_name = *reg_name & ~(1<<pin_num); // Write low-value to a set bit in given register
 }
 
 /*--------------------------------------------------------------------*/
@@ -46,14 +53,14 @@ void GPIO_write_low(volatile uint8_t *reg_name, uint8_t pin_num)
 /* GPIO_write_high */
 void GPIO_write_high(volatile uint8_t *reg_name, uint8_t pin_num)
 {
-	*reg_name |= (1<<pin_num); 
+	*reg_name |= (1<<pin_num); //Write high-value to a set bit in given register
 }
 /*--------------------------------------------------------------------*/
 
 /* GPIO_toggle */
 uint8_t GPIO_toggle(volatile uint8_t *reg_name, uint8_t pin_num)
 {
-	*reg_name ^= (1<<pin_num);
+	*reg_name ^= (1<<pin_num);  // Flib given bit in register
 }
 
 
@@ -62,6 +69,6 @@ uint8_t GPIO_toggle(volatile uint8_t *reg_name, uint8_t pin_num)
 /* GPIO_read */
 uint8_t GPIO_read(volatile uint8_t *reg_name, uint8_t pin_num)
 {
-	return(bit_is_set(*reg_name, pin_num));
+	return(bit_is_set(*reg_name, pin_num)); // if bit is set, returns 1, if not, returns 0
 	
 }
