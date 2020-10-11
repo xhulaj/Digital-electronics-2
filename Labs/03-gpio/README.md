@@ -195,4 +195,17 @@ int main(void)
     return 0;
 }
 ```
+## Creating a function
 
+### Declaration
+Declaration of function is creating information about functions existence, it's name, number of inputs, input types and output type. It is usually done in header file for better 
+lucidity and faster, more effective, compiling, thou it can be also done in main file.
+
+### Definition
+Definition assigns certain algorithm to declared function. It is usually done in separate .c file designated for defining functions.
+
+### Calling a function
+Calling function is as simple as using it in your code. It requires knowledge of the function for correct usage.
+
+### Notes
+Writing declaration and definition in designated files gives the compiler ability, to choose only those functions included in main file.

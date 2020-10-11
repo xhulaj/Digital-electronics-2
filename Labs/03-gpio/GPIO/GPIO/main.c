@@ -49,7 +49,7 @@ int main(void)
         // Pause several milliseconds
         _delay_ms(BLINK_DELAY);
 
-		if(bit_is_clear(PIND,BTN))
+		if(bit_is_clear(PIND,BTN)) // Could use GPIO_read function but it is quite unnecesary, this is less time consuming
 		{
 			GPIO_toggle(&PORTB, LED_GREEN);
 			GPIO_toggle(&PORTC, LED_RED);
