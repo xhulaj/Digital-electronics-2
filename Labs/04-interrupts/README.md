@@ -13,3 +13,13 @@ timer units. Another goal is to practice finding information in the MCU manual; 
 | Timer/Counter1 | 16 | 4.096m | 32.786m | -- | 262m | -- | 1.048 | 4.194 |
 | Timer/Counter2 | 8  | 16u | 128u | 512u | 1.024m | 2.048m | 4.096m | 16.384m |
 
+## Connection of LEDs and Push Buttons
+
+| LED/Button | PORT[pin] |
+| D1 | PB5[13] |
+| D2 | PB4[12] |
+| D3 | PB3[-11] |
+| D4 | PB2[-10] |
+| S1-A1 | PC1[A1] |
+| S2-A2 | PC2[A2] |
+| S3-A3 | PC3[A3] |
