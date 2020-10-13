@@ -16,6 +16,7 @@ timer units. Another goal is to practice finding information in the MCU manual; 
 ## Connection of LEDs and Push Buttons
 
 | **LED/Button** | **PORT[pin]** |
+| :-: | :-: |
 | D1 | PB5[13] |
 | D2 | PB4[12] |
 | D3 | PB3[-11] |
