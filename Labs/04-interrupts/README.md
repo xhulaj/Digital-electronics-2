@@ -211,10 +211,13 @@ ISR(TIMER2_OVF_vect)
 Screenshot of SimulIDE:
 ![SimulIDE](graphics/SimulIDE.png)
 
+## Difference between a regular C function and interrupt service routine
+Firstly, a common C function has determined conditions for it to be called, whereas ISR  is called at anytime, when a hardware interrupt occurs. ISRs are controlled by a coprocessor. When a coprocessor registers a hardware input, it allerts the processor via kernel service which saves its current state for later and executes the related interrupt code. Then the main processor countinues in its previous task.
+
 ## 8-bit Timer Counter0 with PWM - Modes of Operation
 
 ### Normal Mode
-In this mode, the counter is always incrementing without clearing itself (in other words repeats itself). The TOV0 flag sets itself, when counter becomes zero (acts as a ninth bit), thus it doesn't reset itself. Reseting the flag can be accomplished by combining with the timer overflow interrupt.
+In this mode, the counter is always incrementing without clearing itself (in other words repeats itself). The TOV0 flag sets itself, when counter becomes zero (acts as a ninth bit), thus it doesn't reset itself. Reseting the flag can be accomplished by combining with the timer overflow interrupt. Also ISRs do not, on opposition to common functions, return values and also cannot have arguments passed one them.
 
 ### Clear Timer on Compare Match (CTC) Mode
 The resolution of the timer is set by OCR0A register value. The timer resets, when its value matches mentioned registers value.
