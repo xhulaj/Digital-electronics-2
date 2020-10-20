@@ -20,7 +20,7 @@ Connection of seven segment display:
 
 | **7seg pin** | **shift register** | **register pin** |
 | :-: | :-: | :-: |
-| A.1 (12) | U2 | QA (15) |
+	| A.1 (12) | U2 | QA (15) |
 | A.2 (9)  | U2 | QB (1)  |
 | A.3 (8)  | U2 | QC (2)  |
 | A.4 (6)  | U2 | QD (3)  |
