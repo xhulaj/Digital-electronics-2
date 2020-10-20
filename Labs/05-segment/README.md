@@ -17,20 +17,22 @@ Binary values of the segments for display 0 to 9 on a common anode 7-segment dis
    
 Connection of seven segment display:
 
-	| **7seg pin** | **shift register** | **register pin** |
-	| :-: | :-: | :-: |
-	| A.1 (12) | U2 | QA (15) |
-	| A.2 (9)  | U2 | QB (1)  |
-	| A.3 (8)  | U2 | QC (2)  |
-	| A.4 (6)  | U2 | QD (3)  |
-	|  a (11)  | U3 | QA (15) |
-	|  b (7)   | U3 | QB (1)  |
-	|  d (2)   | U3 | QD (3)  |
-	|  c (4)   | U3 | QC (2)  |
-	|  e (1)   | U3 | QE (4)  |
-	|  f (10)  | U3 | QF (5)  |
-	|  g (5)   | U3 | QG (6)  |
-	| DP (3)   | U3 | QH (7)  |
+
+| **7seg pin** | **shift register** | **register pin** |
+| :-: | :-: | :-: |
+| A.1 (12) | U2 | QA (15) |
+| A.2 (9)  | U2 | QB (1)  |
+| A.3 (8)  | U2 | QC (2)  |
+| A.4 (6)  | U2 | QD (3)  |
+|  a (11)  | U3 | QA (15) |
+|  b (7)   | U3 | QB (1)  |
+|  d (2)   | U3 | QD (3)  |
+|  c (4)   | U3 | QC (2)  |
+|  e (1)   | U3 | QE (4)  |
+|  f (10)  | U3 | QF (5)  |
+|  g (5)   | U3 | QG (6)  |
+| DP (3)   | U3 | QH (7)  |
+
 	
 Purpose of two shift registers:
 	
