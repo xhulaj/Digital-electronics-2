@@ -22,22 +22,37 @@
  * value on LCD display when 8-bit Timer/Counter2 overflows.
  */
 uint8_t customChar[] = {
-	0b01110,
-	0b11111,
-	0b01110,
-	0b00100,
-	0b01010,
-	0b10001,
-	0b01110,
-	0b00000,
-	0b10101,
-	0b01010,
-	0b10101,
-	0b01010,
-	0b10101,
-	0b01010,
-	0b10101,
-	0b00000
+	0b10000,
+	0b10000,
+	0b10000,
+	0b10000,
+	0b10000,
+	0b10000,
+	0b10000,
+	0b10000,
+	0b11000,
+	0b11000,
+	0b11000,
+	0b11000,
+	0b11000,
+	0b11000,
+	0b11000,
+	0b11100,
+	0b11100,
+	0b11100,
+	0b11100,
+	0b11100,
+	0b11100,
+	0b11100,
+	0b11100,
+	0b11110,
+	0b11110,
+	0b11110,
+	0b11110,
+	0b11110,
+	0b11110,
+	0b11110,
+	0b11110
 };
 int main(void)
 {
@@ -46,7 +61,7 @@ int main(void)
 
 	 // Set pointer to beginning of CGRAM memory
 	 lcd_command(1 << LCD_CGRAM);
-	 for (uint8_t i = 0; i < 16; i++)
+	 for (uint8_t i = 0; i < 32; i++)
 	 {
 		 // Store all new chars to memory line by line
 		 lcd_data(customChar[i]);
@@ -55,17 +70,12 @@ int main(void)
 	 lcd_command(1 << LCD_DDRAM);
 	 
 	 // Display first custom character
-	 lcd_gotoxy(14,0);
-	 lcd_putc(0);
-	 lcd_putc(1);
     // Initialize LCD display
     //lcd_init(LCD_DISP_ON);
 
     // Put string(s) at LCD display
     lcd_gotoxy(1, 0);
     lcd_puts("00:00.0");
-    lcd_gotoxy(11, 0);
-	lcd_putc('a');
 	lcd_gotoxy(1,1);
 	lcd_putc('b');
 	lcd_gotoxy(11,1);
@@ -75,6 +85,8 @@ int main(void)
     // Set prescaler and enable overflow interrupt every 16 ms
 	TIM2_overflow_16ms();
 	TIM2_overflow_interrupt_enable();
+	TIM0_overflow_16ms();
+	TIM0_overflow_interrupt_enable();
 
     // Enables interrupts by setting the global interrupt mask
     sei();
@@ -102,14 +114,16 @@ ISR(TIMER2_OVF_vect)
 	static uint8_t tens = 0;
 	static uint8_t secs = 00;
 	static uint8_t mins = 0;
+	uint16_t sq_mins = secs * secs;	
+	
 	char LCD_string[2] = "  ";
+	char sq_string[4] = "    ";
 
     number_of_overflows++;
     if (number_of_overflows >= 6)
     {
         // Do this every 6 x 16 ms = 100 ms
         number_of_overflows = 0;
-		
 		tens++;
 		if(tens > 9)
 		{
@@ -119,17 +133,73 @@ ISR(TIMER2_OVF_vect)
 		if(secs > 59)
 		{
 			secs = 0;
+			lcd_gotoxy(11,0);
+			lcd_putc(32);
+			lcd_putc(32);
+			lcd_putc(32);
+			lcd_putc(32);
+			sq_mins = 0;
+			mins++;
+		}
+		if(mins > 59)
+		{
+			mins = 0;
 		}
 
 		itoa(tens, LCD_string, 10);
 		lcd_gotoxy(7,0);
 		lcd_puts(LCD_string);
-		itoa(secs, LCD_string,10);
-		lcd_gotoxy(5, 0);
-		lcd_putc(LCD_string[1]);
+		if(secs < 10)
+		{
+			itoa(secs, &LCD_string[1],10);
+			LCD_string[0] = '0';
+		}
+		if(secs > 9)
+		{
+			itoa(secs, &LCD_string[0],10);
+		}
 		lcd_gotoxy(4, 0);
-		lcd_putc(LCD_string[0]);
-		
-
+		lcd_puts(LCD_string);
+		if(mins < 10)
+		{
+			itoa(mins, &LCD_string[1],10);
+			LCD_string[0] = '0';
+		}
+		if(mins > 9)
+		{
+			itoa(mins, &LCD_string[0],10);
+		}
+		lcd_gotoxy(1, 0);
+		lcd_puts(LCD_string);
+		// print square of mins to screen
+		itoa(sq_mins, sq_string, 10);
+		lcd_gotoxy(11,0);
+		lcd_puts(sq_string);
     }
+
+}
+ISR(TIMER0_OVF_vect)
+{
+	static uint8_t bar = 0;
+	static uint8_t pos = 0;
+	static uint8_t symbol[6] = {32, 0, 1, 2, 3, 255};
+	lcd_gotoxy(pos, 1);
+	lcd_putc(symbol[bar]);
+	bar++;
+	
+	if(bar > 5)
+	{
+		pos++;
+		bar = 0;
+	}
+	if( pos > 9)
+	{
+		pos = 0;
+		bar = 0;
+		lcd_gotoxy(0,1);
+		for(int i = 0; i < 10; i++)
+		{
+			lcd_putc(32);
+		}
+	}
 }

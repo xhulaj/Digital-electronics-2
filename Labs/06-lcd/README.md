@@ -24,3 +24,116 @@ Values for uppercase 'A' to 'Z' are 0x40 to 0x5a, 'a' to 'z' are 0x61 to 0x7a, '
    | `lcd_puts` | `a`(string) | Display string from program memory without auto linefeed | `lcd_puts(string_variable);` |
    | `lcd_command` | `cmd`(instruction to send to LCD controller | Send data byte to LCD controller | `lcd_command(1 << LCD_DDRAM);` |
    | `lcd_data` | `data`(byte to send to LCD controller) | Send data byte to LCD controller | `lcd_data(customChar[i]);` |
+  
+## Picture of time signals between ATmega328P and HD44780
+
+![Graph](graphics/graph.png)
+
+##Listing of TIMER2_OVF_vect interrupt routine with complete stopwatch code (minutes:seconds.tenths) and square value computation
+
+```Makefile
+ISR(TIMER2_OVF_vect)
+{
+    static uint8_t number_of_overflows = 0;
+	static uint8_t tens = 0;
+	static uint8_t secs = 00;
+	static uint8_t mins = 0;
+	uint16_t sq_mins = secs * secs;	
+	
+	char LCD_string[2] = "  ";
+	char sq_string[4] = "    ";
+
+    number_of_overflows++;
+    if (number_of_overflows >= 6)
+    {
+        // Do this every 6 x 16 ms = 100 ms
+        number_of_overflows = 0;
+		tens++;
+		if(tens > 9)
+		{
+			tens = 0;
+			secs++;
+		}
+		if(secs > 59)
+		{
+			secs = 0;
+			lcd_gotoxy(11,0);
+			lcd_putc(32);
+			lcd_putc(32);
+			lcd_putc(32);
+			lcd_putc(32);
+			sq_mins = 0;
+			mins++;
+		}
+		if(mins > 59)
+		{
+			mins = 0;
+		}
+
+		itoa(tens, LCD_string, 10);
+		lcd_gotoxy(7,0);
+		lcd_puts(LCD_string);
+		if(secs < 10)
+		{
+			itoa(secs, &LCD_string[1],10);
+			LCD_string[0] = '0';
+		}
+		if(secs > 9)
+		{
+			itoa(secs, &LCD_string[0],10);
+		}
+		lcd_gotoxy(4, 0);
+		lcd_puts(LCD_string);
+		if(mins < 10)
+		{
+			itoa(mins, &LCD_string[1],10);
+			LCD_string[0] = '0';
+		}
+		if(mins > 9)
+		{
+			itoa(mins, &LCD_string[0],10);
+		}
+		lcd_gotoxy(1, 0);
+		lcd_puts(LCD_string);
+		// print square of mins to screen
+		itoa(sq_mins, sq_string, 10);
+		lcd_gotoxy(11,0);
+		lcd_puts(sq_string);
+    }
+
+}
+```
+
+## Listing of TIMER0_OVF_vect interrupt routine with a progress bar
+
+```Makefile
+ISR(TIMER0_OVF_vect)
+{
+	static uint8_t bar = 0;
+	static uint8_t pos = 0;
+	static uint8_t symbol[6] = {32, 0, 1, 2, 3, 255};
+	lcd_gotoxy(pos, 1);
+	lcd_putc(symbol[bar]);
+	bar++;
+	
+	if(bar > 5)
+	{
+		pos++;
+		bar = 0;
+	}
+	if( pos > 9)
+	{
+		pos = 0;
+		bar = 0;
+		lcd_gotoxy(0,1);
+		for(int i = 0; i < 10; i++)
+		{
+			lcd_putc(32);
+		}
+	}
+}
+```
+
+## Screenshot of SimulIDE circuit when "Power Circuit" is applied
+
+![SimulIDE](graphics/simulIDE2.png)
