@@ -3,7 +3,9 @@
 ## Lab prerequisites
 
 ### Connection of five push buttons: Select, Left, Up, Down, and Right on [LCD keypad shield](../../Docs/arduino_shield.pdf)
-    All buttons have common ground and are connected to a signle pin through voltage divider. Which button is pressed is distinguished by the voltage on the output pin.
+
+All buttons have common ground and are connected to a signle pin through voltage divider. 
+Which button is pressed is distinguished by the voltage on the output pin.
 
 ### Voltage value on pin PC0[A0] if one button is pressed at a time
 
