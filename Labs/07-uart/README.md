@@ -138,7 +138,7 @@ ISR(ADC_vect)
 
 ### Hand drawn picture of UART signal
 
-![Signal](graphics/signal.jpg)
+![Signal](graphics/dignal.jpg)
 
 ### Listing of code for calculating parity bit ( displaying is in part above)
 
