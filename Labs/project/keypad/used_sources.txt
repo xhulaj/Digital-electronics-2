@@ -1,0 +1,8 @@
+explanation and program idea for debouncing
+https://hackaday.com/2015/12/10/embed-with-elliot-debounce-your-noisy-buttons-part-ii/?fbclid=IwAR0zPAZvgTfq3LnxLyi3n-pnJ9wra6WdT6oDIUhXSI3gVN6QqwCBTuMLnGM
+
+simple keypad schematic
+https://www.maximintegrated.com/en/design/technical-documents/app-notes/3/3414.html
+
+advanced keypad schematic using 1 analog pin
+https://www.electronicwings.com/arduino/4x4-keypad-interfacing-with-arduino-uno
