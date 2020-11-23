@@ -1,2 +1,5 @@
 explanation and schematic
 https://www.electronics-tutorials.ws/combination/r-2r-dac.html 
+
+sinus generation 
+https://www.mathworks.com/help/fixedpoint/ug/compute-sine-and-cosine-using-cordic-rotation-kernel.html
