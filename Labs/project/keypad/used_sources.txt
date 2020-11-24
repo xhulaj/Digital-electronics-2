@@ -5,4 +5,7 @@ simple keypad schematic
 https://www.maximintegrated.com/en/design/technical-documents/app-notes/3/3414.html
 
 advanced keypad schematic using 1 analog pin
+-bad resistor values
 https://www.electronicwings.com/arduino/4x4-keypad-interfacing-with-arduino-uno
+-better values
+http://www.technoblogy.com/show?NGM
