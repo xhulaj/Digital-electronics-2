@@ -33,6 +33,10 @@
 
 /* Defines -----------------------------------------------------------*/
 /**
+	*@brief Define CTC mode for Timer/counter0
+*/
+#define TIM0_set_mode_CTC()		TCCR0B &= ~(1<<WGM02); TCCR0A |= (1<<WGM01); TCCR0A &= ~(1<<WGM00);
+/**
  * @brief Defines prescaler CPU frequency values for Timer/Counter0.
  * @note  F_CPU = 16 MHz
   */
@@ -47,6 +51,8 @@
  */
 #define TIM0_overflow_interrupt_enable()    TIMSK0 |= (1<<TOIE0);
 #define TIM0_overflow_interrupt_disable()   TIMSK0 &= ~(1<<TOIE0);
+#define TIM0_CTC_A_interrupt_enable()		TIMSK0 |= (1<<OCIE0A);
+#define TIM0_CTC_A_interrupt_disable()		TIMSK0 &= ~(1<<OCIE0A);
 /**
  * @brief Defines prescaler CPU frequency values for Timer/Counter1.
  * @note  F_CPU = 16 MHz
