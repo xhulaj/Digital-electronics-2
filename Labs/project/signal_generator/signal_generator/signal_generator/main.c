@@ -39,6 +39,7 @@ int main(void)
 
 ISR(TIMER0_COMPA_vect)
 {
+	// Table for quarter of sinus wave
 	static uint8_t sinus_table[359] =
 	{
 		0b	00000000	;	// sample 0

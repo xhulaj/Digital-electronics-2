@@ -71,6 +71,10 @@
 #define TIM1_overflow_interrupt_disable()   TIMSK1 &= ~(1<<TOIE1);
 
 /**
+	*@brief Define CTC mode for Timer/counter0
+*/
+#define TIM2_set_mode_CTC()		TCCR2B &= ~(1<<WGM22); TCCR2A |= (1<<WGM21); TCCR2A &= ~(1<<WGM20);
+/**
  * @brief Defines prescaler CPU frequency values for Timer/Counter1.
  * @note  F_CPU = 16 MHz
   */
@@ -88,4 +92,6 @@
  */
 #define TIM2_overflow_interrupt_enable()    TIMSK2 |= (1<<TOIE2);
 #define TIM2_overflow_interrupt_disable()   TIMSK2 &= ~(1<<TOIE2);
+#define TIM2_CTC_A_interrupt_enable()		TIMSK2 |= (1<<OCIE2A);
+#define TIM2_CTC_A_interrupt_disable()		TIMSK2 &= ~(1<<OCIE2A);
 #endif	
