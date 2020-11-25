@@ -8,5 +8,7 @@ lcd.c
 
 main.c
 
+signal_generator.c
+
 uart.c
 

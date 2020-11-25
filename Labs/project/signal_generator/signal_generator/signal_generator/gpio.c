@@ -58,7 +58,7 @@ void GPIO_write_high(volatile uint8_t *reg_name, uint8_t pin_num)
 /*--------------------------------------------------------------------*/
 
 /* GPIO_toggle */
-uint8_t GPIO_toggle(volatile uint8_t *reg_name, uint8_t pin_num)
+void GPIO_toggle(volatile uint8_t *reg_name, uint8_t pin_num)
 {
 	*reg_name ^= (1<<pin_num);  // Flib given bit in register
 }
