@@ -581,11 +581,11 @@ ISR(TIMER0_COMPA_vect)
 		0b01111100,    // sample511
 		0b01111101     // sample512
 	};
-	/*if(signal_duration >= sample)					// true, until the sound is played in full duration 
+	if(signal_duration >= sample)					// true, until the sound is played in full duration 
 	{
 		// return amplitude value based on currently pressed button
-		/*
-		keys are index from 0 to 15, thus row frquency (index 0-3) is given by: key/4; and and column frequency (index 4-7)  is given by: 4 + key % 4;
+		
+		//keys are index from 0 to 15, thus row frquency (index 0-3) is given by: key/4; and and column frequency (index 4-7)  is given by: 4 + key % 4;
 		
 		signal_amplitude = (sinus_table[gen_sig_sample_id(sample, &frequency_set[key/4])] + sinus_table[gen_sig_sample_id(sample, &frequency_set[4 + (key % 4)])])/2;  
 		itoa(signal_amplitude, uart_message, 10);	// convert amplitude to decimal and save to string
