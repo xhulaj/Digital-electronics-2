@@ -10,5 +10,5 @@
 #define SIGNAL_GENERATOR_H_
 
 uint16_t gen_sig_sample_id(uint32_t sample, uint16_t *frequency);
-
+uint16_t gen_sample_quantity(uint16_t frequency);
 #endif /* SIGNAL_GENERATOR_H_ */

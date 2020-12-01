@@ -12,8 +12,7 @@
 #endif
 
 // Definition of output compare register value for 1MHz frequency of 
-#define COMP_REG_A_MASK 0b01011000;
-
+#define COMP_REG_A_MASK 0b00000111;
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <stdlib.h>         // C library. Needed for conversion function
@@ -48,18 +47,17 @@ ISR(TIMER0_COMPA_vect)
 {
 	char uart_message[4] = "    ";
 	static uint8_t key = 12;
-	static uint8_t signal_amplitude = 0b00000000;
-	static uint32_t signal_duration = 0b000001111010000100100000; // Signal duration of 500 ms
-	static uint32_t sample = 0b000000000000000000000000;
-	
+	static uint8_t signal_amplitude = 0b00000000;		// variable for final amplitude
+	static uint16_t sample_cnt_1 = 0b00;
+	static uint16_t sample_cnt_2 = 0b00;
 // Table of set frequencies, whose values are for interrupt frequency 1 MHz equal to their number of samples
-	static uint16_t frequency_set[8] =
+	static uint16_t samples_set[8] =
 	{
-		697,
-		770,
-		825,
-		941,
-		1209,
+		1435,//697
+		1298,//770
+		1212,//825,
+		1063,//941
+		827,//1209
 		1336,
 		1477,
 		1633
@@ -581,16 +579,21 @@ ISR(TIMER0_COMPA_vect)
 		0b01111100,    // sample511
 		0b01111101     // sample512
 	};
-	if(signal_duration >= sample)					// true, until the sound is played in full duration 
+	if(...)					// true, until the sound is played in full duration 
 	{
 		// return amplitude value based on currently pressed button
 		
 		//keys are index from 0 to 15, thus row frquency (index 0-3) is given by: key/4; and and column frequency (index 4-7)  is given by: 4 + key % 4;
 		
-		signal_amplitude = (sinus_table[gen_sig_sample_id(sample, &frequency_set[key/4])] + sinus_table[gen_sig_sample_id(sample, &frequency_set[4 + (key % 4)])])/2;  
+		signal_amplitude = (sinus_table[gen_sig_sample_id(&sample_cnt_1, &samples_set[key/4])] + sinus_table[gen_sig_sample_id(&sample_cnt_2, &samples_set[4 + (key % 4)])])/2;  
 		itoa(signal_amplitude, uart_message, 10);	// convert amplitude to decimal and save to string
 		uart_puts(uart_message);					// send string to uart
-		sample++;									// increment sample
+		sample_cnt_1++;
+		sample_cnt_2++;									// increment sample
+	}
+	if(...)					// set custom frequency
+	{
+		
 	}
 	else											// if all samples played, reset sample  counter
 	{
