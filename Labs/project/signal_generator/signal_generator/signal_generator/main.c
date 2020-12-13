@@ -10,9 +10,17 @@
 #ifndef F_CPU
 #define F_CPU			16000000	// CPU frequency in Hz 
 #endif
+#define R0	PB0
+#define R1	PB1
+#define R2	PB2
+#define R3	PB3
+#define R4	PB4
+#define R5	PB5
+#define R6	PB6
+#define R7	PB7
 
 // Definition of output compare register value for 1MHz frequency of 
-#define COMP_REG_A_MASK 0b00000111;
+#define COMP_REG_A_MASK 0b01011110;
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <stdlib.h>         // C library. Needed for conversion function
@@ -26,30 +34,46 @@
 
 int main(void)
 {
-	//uint8_t output = 0b00000000;
 	//############# TIMER/COUNTER0 SETTINGS
 	TIM0_set_mode_CTC();			// Set timer to CTC mode
-	TIM0_overflow_16us();
+	TIM0_overflow_16ms();
 	TIM0_CTC_A_interrupt_enable();	// Interrupt enable
 	OCR0A = COMP_REG_A_MASK;		// Set Compare register A mask for 1 MHz frequency
 	GPIO_config_output(&DDRC, PC0);
 	GPIO_write_low(&PORTC, PC0);
+	// SET output pins for R2R ladder
+	GPIO_config_output(&DDRB, R0);
+	GPIO_write_low(&PORTB, R0);
+	GPIO_config_output(&DDRB, R1);
+	GPIO_write_low(&PORTB, R1);
+	GPIO_config_output(&DDRB, R2);
+	GPIO_write_low(&PORTB, R2);
+	GPIO_config_output(&DDRB, R3);
+	GPIO_write_low(&PORTB, R3);
+	GPIO_config_output(&DDRB, R4);
+	GPIO_write_low(&PORTB, R4);
+	GPIO_config_output(&DDRB, R5);
+	GPIO_write_low(&PORTB, R5);
+	GPIO_config_output(&DDRB, R6);
+	GPIO_write_low(&PORTB, R6);
+	GPIO_config_output(&DDRB, R7);
+	GPIO_write_low(&PORTB, R7);
 	
 	// Enables interrupts by setting the global interrupt mask
 	sei();
     while (1) 
     {
-		
+		//PORTB = 0b11111111;
     }
 }
 
 ISR(TIMER0_COMPA_vect)
 {
-	char uart_message[4] = "    ";
-	static uint8_t key = 12;
+	//char uart_message[4] = "    ";
+	static uint8_t key = 00;
 	static uint8_t signal_amplitude = 0b00000000;		// variable for final amplitude
-	static uint16_t sample_cnt_1 = 0b00;
-	static uint16_t sample_cnt_2 = 0b00;
+	static uint16_t sample_cnt_1 = 0b00010110;
+	static uint16_t sample_cnt_2 = 0b00001110;
 // Table of set frequencies, whose values are for interrupt frequency 1 MHz equal to their number of samples
 	static uint16_t samples_set[8] =
 	{
@@ -579,30 +603,18 @@ ISR(TIMER0_COMPA_vect)
 		0b01111100,    // sample511
 		0b01111101     // sample512
 	};
-	if(...)					// true, until the sound is played in full duration 
-	{
 		// return amplitude value based on currently pressed button
 		
 		//keys are index from 0 to 15, thus row frquency (index 0-3) is given by: key/4; and and column frequency (index 4-7)  is given by: 4 + key % 4;
 		
 		signal_amplitude = (sinus_table[gen_sig_sample_id(&sample_cnt_1, &samples_set[key/4])] + sinus_table[gen_sig_sample_id(&sample_cnt_2, &samples_set[4 + (key % 4)])])/2;  
-		itoa(signal_amplitude, uart_message, 10);	// convert amplitude to decimal and save to string
-		uart_puts(uart_message);					// send string to uart
-		sample_cnt_1++;
-		sample_cnt_2++;									// increment sample
-	}
-	if(...)					// set custom frequency
-	{
-		
-	}
-	else											// if all samples played, reset sample  counter
-	{
-		sample = 0b00;
-	}
-	*/
+		sample_cnt_1 = sample_cnt_1 + 1;
+		sample_cnt_2 = sample_cnt_2 + 1;									// increment sample
 	//uint8_t button;
 	GPIO_toggle(&PORTC, PC0);
-
+	PORTB = signal_amplitude;
+	//PORTB = 0b11111111;
+	GPIO_write_high(&PORTB, R6);
 }
 
 
