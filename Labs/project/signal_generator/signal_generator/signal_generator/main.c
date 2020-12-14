@@ -20,7 +20,7 @@
 #define R7	PB7
 
 // Definition of output compare register value for 1MHz frequency of 
-#define COMP_REG_A_MASK 0b01011110;
+#define COMP_REG_A_MASK 0b00010000;
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <stdlib.h>         // C library. Needed for conversion function
@@ -36,7 +36,7 @@ int main(void)
 {
 	//############# TIMER/COUNTER0 SETTINGS
 	TIM0_set_mode_CTC();			// Set timer to CTC mode
-	TIM0_overflow_16ms();
+	TIM0_overflow_16us();
 	TIM0_CTC_A_interrupt_enable();	// Interrupt enable
 	OCR0A = COMP_REG_A_MASK;		// Set Compare register A mask for 1 MHz frequency
 	GPIO_config_output(&DDRC, PC0);
@@ -63,7 +63,6 @@ int main(void)
 	sei();
     while (1) 
     {
-		//PORTB = 0b11111111;
     }
 }
 
@@ -605,15 +604,16 @@ ISR(TIMER0_COMPA_vect)
 	};
 		// return amplitude value based on currently pressed button
 		
+		//signal_amplitude = sample_cnt_1;				  // sawwtooth signal generation
+		signal_amplitude = sinus_table[sample_cnt_1];	  // sinus gegeration test
 		//keys are index from 0 to 15, thus row frquency (index 0-3) is given by: key/4; and and column frequency (index 4-7)  is given by: 4 + key % 4;
-		
-		signal_amplitude = (sinus_table[gen_sig_sample_id(&sample_cnt_1, &samples_set[key/4])] + sinus_table[gen_sig_sample_id(&sample_cnt_2, &samples_set[4 + (key % 4)])])/2;  
+		//signal_amplitude = (sinus_table[gen_sig_sample_id(&sample_cnt_1, &samples_set[key/4])] + sinus_table[gen_sig_sample_id(&sample_cnt_2, &samples_set[4 + (key % 4)])])/2;  
 		sample_cnt_1 = sample_cnt_1 + 1;
-		sample_cnt_2 = sample_cnt_2 + 1;									// increment sample
-	//uint8_t button;
-	GPIO_toggle(&PORTC, PC0);
-	PORTB = signal_amplitude;
-	//PORTB = 0b11111111;
+		sample_cnt_2 = sample_cnt_2 + 1;
+		if(sample_cnt_1 > 511) sample_cnt_1 = 0;		  // reseting counter, test purposes
+	PORTB = signal_amplitude;							  // updating output
+	
+	GPIO_toggle(&PORTC, PC0);							  // testing timer frequency
 	GPIO_write_high(&PORTB, R6);
 }
 
