@@ -16,11 +16,11 @@
 #define R3	PB3
 #define R4	PB4
 #define R5	PB5
-#define R6	PB6
-#define R7	PB7
+#define R6	PD6
+#define R7	PD7
 
 // Definition of output compare register value for 1MHz frequency of 
-#define COMP_REG_A_MASK 0b00010000;
+#define COMP_REG_A_MASK 0b00011111;
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <stdlib.h>         // C library. Needed for conversion function
@@ -54,15 +54,16 @@ int main(void)
 	GPIO_write_low(&PORTB, R4);
 	GPIO_config_output(&DDRB, R5);
 	GPIO_write_low(&PORTB, R5);
-	GPIO_config_output(&DDRB, R6);
-	GPIO_write_low(&PORTB, R6);
-	GPIO_config_output(&DDRB, R7);
-	GPIO_write_low(&PORTB, R7);
+	GPIO_config_output(&DDRD, R6);
+	GPIO_write_low(&PORTD, R6);
+	GPIO_config_output(&DDRD, R7);
+	GPIO_write_low(&PORTD, R7);
 	
 	// Enables interrupts by setting the global interrupt mask
 	sei();
     while (1) 
     {
+
     }
 }
 
@@ -71,8 +72,8 @@ ISR(TIMER0_COMPA_vect)
 	//char uart_message[4] = "    ";
 	static uint8_t key = 00;
 	static uint8_t signal_amplitude = 0b00000000;		// variable for final amplitude
-	static uint16_t sample_cnt_1 = 0b00010110;
-	static uint16_t sample_cnt_2 = 0b00001110;
+	static uint16_t sample_cnt_1 = 0b00000000;
+	static uint16_t sample_cnt_2 = 0b00000000;
 // Table of set frequencies, whose values are for interrupt frequency 1 MHz equal to their number of samples
 	static uint16_t samples_set[8] =
 	{
@@ -604,17 +605,15 @@ ISR(TIMER0_COMPA_vect)
 	};
 		// return amplitude value based on currently pressed button
 		
-		//signal_amplitude = sample_cnt_1;				  // sawwtooth signal generation
+		//signal_amplitude = (sample_cnt_1);				  // sawwtooth signal generation
 		signal_amplitude = sinus_table[sample_cnt_1];	  // sinus gegeration test
 		//keys are index from 0 to 15, thus row frquency (index 0-3) is given by: key/4; and and column frequency (index 4-7)  is given by: 4 + key % 4;
 		//signal_amplitude = (sinus_table[gen_sig_sample_id(&sample_cnt_1, &samples_set[key/4])] + sinus_table[gen_sig_sample_id(&sample_cnt_2, &samples_set[4 + (key % 4)])])/2;  
 		sample_cnt_1 = sample_cnt_1 + 1;
 		sample_cnt_2 = sample_cnt_2 + 1;
 		if(sample_cnt_1 > 511) sample_cnt_1 = 0;		  // reseting counter, test purposes
-	PORTB = signal_amplitude;							  // updating output
-	
-	GPIO_toggle(&PORTC, PC0);							  // testing timer frequency
-	GPIO_write_high(&PORTB, R6);
+		PORTB = signal_amplitude & 0b00111111;
+		PORTD = signal_amplitude & 0b11000000;
 }
 
 
