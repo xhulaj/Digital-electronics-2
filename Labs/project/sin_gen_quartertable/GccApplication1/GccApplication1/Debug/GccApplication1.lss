@@ -23,11 +23,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_frame  00000204  00000000  00000000  00002188  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00000538  00000000  00000000  0000238c  2**0
+ 10 .debug_str    000005ad  00000000  00000000  0000238c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00000574  00000000  00000000  000028c4  2**0
+ 11 .debug_loc    00000574  00000000  00000000  00002939  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 000000c0  00000000  00000000  00002e38  2**0
+ 12 .debug_ranges 000000c0  00000000  00000000  00002ead  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -101,12 +101,6 @@ Disassembly of section .text:
   a2:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
 000000a6 <GPIO_config_output>:
-/*--------------------------------------------------------------------*/
-
-/* GPIO_write_high */
-void GPIO_write_high(volatile uint8_t *reg_name, uint8_t pin_num)
-{
-	*reg_name |= (1<<pin_num); //Write high-value to a set bit in given register
   a6:	fc 01       	movw	r30, r24
   a8:	40 81       	ld	r20, Z
   aa:	21 e0       	ldi	r18, 0x01	; 1
@@ -136,12 +130,6 @@ void GPIO_write_high(volatile uint8_t *reg_name, uint8_t pin_num)
   d6:	08 95       	ret
 
 000000d8 <GPIO_toggle>:
-/*--------------------------------------------------------------------*/
-
-/* GPIO_toggle */
-void GPIO_toggle(volatile uint8_t *reg_name, uint8_t pin_num)
-{
-	*reg_name ^= (1<<pin_num);  // Flib given bit in register
   d8:	fc 01       	movw	r30, r24
   da:	40 81       	ld	r20, Z
   dc:	21 e0       	ldi	r18, 0x01	; 1
@@ -283,20 +271,12 @@ ISR(TIMER0_COMPA_vect)
  1b4:	18 95       	reti
 
 000001b6 <sinus_gen>:
-#include "sinus_gen.h"
-
-uint8_t sinus_gen(uint8_t *table, uint16_t sample)
-{
-	uint8_t out = 0;
-	if((sample >= 127) && (sample <= 255))
  1b6:	9b 01       	movw	r18, r22
  1b8:	2f 57       	subi	r18, 0x7F	; 127
  1ba:	31 09       	sbc	r19, r1
  1bc:	21 38       	cpi	r18, 0x81	; 129
  1be:	31 05       	cpc	r19, r1
  1c0:	40 f4       	brcc	.+16     	; 0x1d2 <sinus_gen+0x1c>
-	{
-		out = table[255-sample];
  1c2:	9c 01       	movw	r18, r24
  1c4:	26 1b       	sub	r18, r22
  1c6:	37 0b       	sbc	r19, r23
@@ -305,31 +285,23 @@ uint8_t sinus_gen(uint8_t *table, uint16_t sample)
  1cc:	ff 4f       	sbci	r31, 0xFF	; 255
  1ce:	80 81       	ld	r24, Z
  1d0:	08 95       	ret
-	}
-	else if ((sample >= 256) && (sample <= 383))
  1d2:	9b 01       	movw	r18, r22
  1d4:	3a 95       	dec	r19
  1d6:	20 38       	cpi	r18, 0x80	; 128
  1d8:	31 05       	cpc	r19, r1
  1da:	30 f4       	brcc	.+12     	; 0x1e8 <sinus_gen+0x32>
-	{
-		out = -1*(table[sample - 256]);
  1dc:	fc 01       	movw	r30, r24
  1de:	e2 0f       	add	r30, r18
  1e0:	f3 1f       	adc	r31, r19
  1e2:	80 81       	ld	r24, Z
  1e4:	81 95       	neg	r24
  1e6:	08 95       	ret
-	}
-	else if((sample >= 384) && (sample <= 511))
  1e8:	9b 01       	movw	r18, r22
  1ea:	20 58       	subi	r18, 0x80	; 128
  1ec:	31 40       	sbci	r19, 0x01	; 1
  1ee:	20 38       	cpi	r18, 0x80	; 128
  1f0:	31 05       	cpc	r19, r1
  1f2:	48 f4       	brcc	.+18     	; 0x206 <sinus_gen+0x50>
-	{
-		out = -1 * (table[511 - sample]);
  1f4:	9c 01       	movw	r18, r24
  1f6:	26 1b       	sub	r18, r22
  1f8:	37 0b       	sbc	r19, r23
@@ -339,25 +311,13 @@ uint8_t sinus_gen(uint8_t *table, uint16_t sample)
  200:	80 81       	ld	r24, Z
  202:	81 95       	neg	r24
  204:	08 95       	ret
-	}
-	else
-	{
-		out = table[sample];
  206:	fc 01       	movw	r30, r24
  208:	e6 0f       	add	r30, r22
  20a:	f7 1f       	adc	r31, r23
  20c:	80 81       	ld	r24, Z
-	}
-	return out;
  20e:	08 95       	ret
 
 00000210 <__vector_18>:
-
-/*************************************************************************
- * Function: UART Receive Complete interrupt
- * Purpose:  called when the UART has received a character
- **************************************************************************/
-{
  210:	1f 92       	push	r1
  212:	0f 92       	push	r0
  214:	0f b6       	in	r0, 0x3f	; 63
@@ -368,67 +328,25 @@ uint8_t sinus_gen(uint8_t *table, uint16_t sample)
  21e:	9f 93       	push	r25
  220:	ef 93       	push	r30
  222:	ff 93       	push	r31
-    unsigned char usr;
-    unsigned char lastRxError = 0;
-
-
-    /* read UART status register and UART data register */
-    usr  = UART0_STATUS;
  224:	80 91 c0 00 	lds	r24, 0x00C0	; 0x8000c0 <__DATA_REGION_ORIGIN__+0x60>
-    data = UART0_DATA;
  228:	20 91 c6 00 	lds	r18, 0x00C6	; 0x8000c6 <__DATA_REGION_ORIGIN__+0x66>
-
-    /* get FEn (Frame Error) DORn (Data OverRun) UPEn (USART Parity Error) bits */
-    #if defined(FE) && defined(DOR) && defined(UPE)
-    lastRxError = usr & (_BV(FE) | _BV(DOR) | _BV(UPE) );
-    #elif defined(FE0) && defined(DOR0) && defined(UPE0)
-    lastRxError = usr & (_BV(FE0) | _BV(DOR0) | _BV(UPE0) );
  22c:	8c 71       	andi	r24, 0x1C	; 28
-    #elif defined(FE) && defined(DOR)
-    lastRxError = usr & (_BV(FE) | _BV(DOR) );
-    #endif
-
-    /* calculate buffer index */
-    tmphead = ( UART_RxHead + 1) & UART_RX_BUFFER_MASK;
  22e:	e0 91 84 01 	lds	r30, 0x0184	; 0x800184 <UART_RxHead>
  232:	ef 5f       	subi	r30, 0xFF	; 255
  234:	ef 73       	andi	r30, 0x3F	; 63
-
-    if (tmphead == UART_RxTail)
  236:	90 91 83 01 	lds	r25, 0x0183	; 0x800183 <UART_RxTail>
  23a:	e9 17       	cp	r30, r25
  23c:	39 f0       	breq	.+14     	; 0x24c <__vector_18+0x3c>
-        lastRxError = UART_BUFFER_OVERFLOW >> 8;
-    }
-    else
-    {
-        /* store new index */
-        UART_RxHead = tmphead;
  23e:	e0 93 84 01 	sts	0x0184, r30	; 0x800184 <UART_RxHead>
-        /* store received data in buffer */
-        UART_RxBuf[tmphead] = data;
  242:	f0 e0       	ldi	r31, 0x00	; 0
  244:	e9 57       	subi	r30, 0x79	; 121
  246:	fe 4f       	sbci	r31, 0xFE	; 254
  248:	20 83       	st	Z, r18
  24a:	01 c0       	rjmp	.+2      	; 0x24e <__vector_18+0x3e>
-    tmphead = ( UART_RxHead + 1) & UART_RX_BUFFER_MASK;
-
-    if (tmphead == UART_RxTail)
-    {
-        /* error: receive buffer overflow */
-        lastRxError = UART_BUFFER_OVERFLOW >> 8;
  24c:	82 e0       	ldi	r24, 0x02	; 2
-        /* store new index */
-        UART_RxHead = tmphead;
-        /* store received data in buffer */
-        UART_RxBuf[tmphead] = data;
-    }
-    UART_LastRxError |= lastRxError;
  24e:	90 91 82 01 	lds	r25, 0x0182	; 0x800182 <UART_LastRxError>
  252:	89 2b       	or	r24, r25
  254:	80 93 82 01 	sts	0x0182, r24	; 0x800182 <UART_LastRxError>
-}
  258:	ff 91       	pop	r31
  25a:	ef 91       	pop	r30
  25c:	9f 91       	pop	r25
@@ -441,12 +359,6 @@ uint8_t sinus_gen(uint8_t *table, uint16_t sample)
  26a:	18 95       	reti
 
 0000026c <__vector_19>:
-
-/*************************************************************************
- * Function: UART Data Register Empty interrupt
- * Purpose:  called when the UART is ready to transmit the next byte
- **************************************************************************/
-{
  26c:	1f 92       	push	r1
  26e:	0f 92       	push	r0
  270:	0f b6       	in	r0, 0x3f	; 63
@@ -456,42 +368,25 @@ uint8_t sinus_gen(uint8_t *table, uint16_t sample)
  278:	9f 93       	push	r25
  27a:	ef 93       	push	r30
  27c:	ff 93       	push	r31
-    unsigned char tmptail;
-
-
-    if (UART_TxHead != UART_TxTail)
  27e:	90 91 86 01 	lds	r25, 0x0186	; 0x800186 <UART_TxHead>
  282:	80 91 85 01 	lds	r24, 0x0185	; 0x800185 <UART_TxTail>
  286:	98 17       	cp	r25, r24
  288:	69 f0       	breq	.+26     	; 0x2a4 <__vector_19+0x38>
-    {
-        /* calculate and store new buffer index */
-        tmptail     = (UART_TxTail + 1) & UART_TX_BUFFER_MASK;
  28a:	e0 91 85 01 	lds	r30, 0x0185	; 0x800185 <UART_TxTail>
  28e:	ef 5f       	subi	r30, 0xFF	; 255
  290:	ef 73       	andi	r30, 0x3F	; 63
-        UART_TxTail = tmptail;
  292:	e0 93 85 01 	sts	0x0185, r30	; 0x800185 <UART_TxTail>
-        /* get one byte from buffer and write it to UART */
-        UART0_DATA = UART_TxBuf[tmptail]; /* start transmission */
  296:	f0 e0       	ldi	r31, 0x00	; 0
  298:	e9 53       	subi	r30, 0x39	; 57
  29a:	fe 4f       	sbci	r31, 0xFE	; 254
  29c:	80 81       	ld	r24, Z
  29e:	80 93 c6 00 	sts	0x00C6, r24	; 0x8000c6 <__DATA_REGION_ORIGIN__+0x66>
  2a2:	05 c0       	rjmp	.+10     	; 0x2ae <__vector_19+0x42>
-    }
-    else
-    {
-        /* tx buffer empty, disable UDRE interrupt */
-        UART0_CONTROL &= ~_BV(UART0_UDRIE);
  2a4:	e1 ec       	ldi	r30, 0xC1	; 193
  2a6:	f0 e0       	ldi	r31, 0x00	; 0
  2a8:	80 81       	ld	r24, Z
  2aa:	8f 7d       	andi	r24, 0xDF	; 223
  2ac:	80 83       	st	Z, r24
-    }
-}
  2ae:	ff 91       	pop	r31
  2b0:	ef 91       	pop	r30
  2b2:	9f 91       	pop	r25

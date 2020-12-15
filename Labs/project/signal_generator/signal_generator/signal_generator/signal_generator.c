@@ -10,9 +10,10 @@
 
 /* Function definitions ----------------------------------------*/
 
-uint16_t gen_sig_sample_id(uint16_t *sample, uint16_t *sample_vol)
+uint16_t gen_sig_sample_id(uint16_t *cnt, uint16_t freq)
 {
-	uint16_t table_sample = ((512 * (*sample))/ *sample_vol) ;  // vypocet vzorku, ktery se ma zpracovat. Jelikoz je pouzity jako index v lookup table
-	if(*sample >= *sample_vol) *sample = 0;
-	return table_sample;
+	uint8_t sample = 512*(195/freq);
+	uint16_t sample_out = ((cnt/sample)*512) ;  // vypocet vzorku, ktery se ma zpracovat. Jelikoz je pouzity jako index v lookup table
+	if(*cnt >= *sample) *cnt = 0;
+	return sample_out;
 }

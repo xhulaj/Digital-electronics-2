@@ -9,5 +9,5 @@
 #ifndef SIGNAL_GENERATOR_H_
 #define SIGNAL_GENERATOR_H_
 
-uint16_t gen_sig_sample_id(uint16_t *sample, uint16_t *sample_vol);
+uint16_t gen_sig_sample_id(uint16_t *cnt, uint16_t freq);
 #endif /* SIGNAL_GENERATOR_H_ */
