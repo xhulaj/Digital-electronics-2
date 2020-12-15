@@ -9,7 +9,16 @@
 #ifndef F_CPU
 #define F_CPU			16000000	// CPU frequency in Hz
 #endif
-#define COMP_REG_A_MASK 0b00011111;
+#define COMP_REG_A_MASK 0b10100000;
+
+#define R0	PB0
+#define R1	PB1
+#define R2	PB2
+#define R3	PB3
+#define R4	PB4
+#define R5	PB5
+#define R6	PD6
+#define R7	PD7
 
 /* Includes ---------------------------------------------------------------------*/
 #include <avr/io.h>
@@ -30,6 +39,25 @@ int main(void)
 	OCR0A = COMP_REG_A_MASK;		// Set Compare register A mask for 1 MHz frequency
 	GPIO_config_output(&DDRC, PC0);
 	GPIO_write_low(&PORTC, PC0);
+	
+	// SET output pins for R2R ladder
+	GPIO_config_output(&DDRB, R0);
+	GPIO_write_low(&PORTB, R0);
+	GPIO_config_output(&DDRB, R1);
+	GPIO_write_low(&PORTB, R1);
+	GPIO_config_output(&DDRB, R2);
+	GPIO_write_low(&PORTB, R2);
+	GPIO_config_output(&DDRB, R3);
+	GPIO_write_low(&PORTB, R3);
+	GPIO_config_output(&DDRB, R4);
+	GPIO_write_low(&PORTB, R4);
+	GPIO_config_output(&DDRB, R5);
+	GPIO_write_low(&PORTB, R5);
+	GPIO_config_output(&DDRD, R6);
+	GPIO_write_low(&PORTD, R6);
+	GPIO_config_output(&DDRD, R7);
+	GPIO_write_low(&PORTD, R7);
+	
     sei();
     while (1) 
     {
@@ -38,7 +66,7 @@ int main(void)
 ISR(TIMER0_COMPA_vect)
 {
 	static uint8_t signal_amplitude = 0b00000000;		// variable for final amplitude
-	static uint16_t sample_cnt_1 = 0b00000000;
+	//static uint16_t sample_cnt_1 = 0b00000000;
 	static uint8_t lookup_table[128] =
 	{
 		0b01111111,    // sample1
@@ -170,9 +198,33 @@ ISR(TIMER0_COMPA_vect)
 		0b11111110,    // sample127
 		0b11111110,    // sample128
 	};
-	signal_amplitude = sinus_gen(&lookup_table, sample_cnt_1);
+	
+	uint16_t sample_out = 0;
+	static uint16_t sample_cnt_1 = 0;
+	
+	static uint16_t generovanafrekvence = 1000;
+	
+	uint16_t sample = 100000/generovanafrekvence;	
+	sample_out = (512*sample_cnt_1/sample);  // vzorek ktery se ma aktualne vycist
+	
+	
+	sample_cnt_1 ++;
+	if(sample_cnt_1 >= sample){
+		sample_cnt_1 = 0;		
+	}
+	
+	//signal_amplitude = sample_out/2;
+	signal_amplitude = sinus_gen(&lookup_table, sample_out);
+	
+	/*
 	sample_cnt_1 ++;
 	if(sample_cnt_1 > 512)
 		sample_cnt_1 = 0;
-	GPIO_toggle(&PORTC, PC0);
+	*/
+		
+	//GPIO_toggle(&PORTC, PC0);
+	
+	PORTB = signal_amplitude & 0b00111111;
+	PORTD = signal_amplitude & 0b11000000;
+	
 }
