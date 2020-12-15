@@ -3,31 +3,31 @@ signal_generator.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000080  00800100  000003ac  00000440  2**0
+  0 .data         00000080  00800100  00000350  000003e4  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         000003ac  00000000  00000000  00000094  2**1
+  1 .text         00000350  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          0000008a  00800180  00800180  000004c0  2**0
+  2 .bss          0000008a  00800180  00800180  00000464  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  000004c0  2**0
+  3 .comment      00000030  00000000  00000000  00000464  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  000004f0  2**2
+  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00000494  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000108  00000000  00000000  00000530  2**0
+  5 .debug_aranges 000000e8  00000000  00000000  000004d4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00001081  00000000  00000000  00000638  2**0
+  6 .debug_info   00000f90  00000000  00000000  000005bc  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00000958  00000000  00000000  000016b9  2**0
+  7 .debug_abbrev 000008d4  00000000  00000000  0000154c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00000759  00000000  00000000  00002011  2**0
+  8 .debug_line   000006b7  00000000  00000000  00001e20  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000228  00000000  00000000  0000276c  2**2
+  9 .debug_frame  00000204  00000000  00000000  000024d8  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000005bc  00000000  00000000  00002994  2**0
+ 10 .debug_str    000005a0  00000000  00000000  000026dc  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000005c2  00000000  00000000  00002f50  2**0
+ 11 .debug_loc    000004de  00000000  00000000  00002c7c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 000000d0  00000000  00000000  00003512  2**0
+ 12 .debug_ranges 000000c0  00000000  00000000  0000315a  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -51,8 +51,8 @@ Disassembly of section .text:
   3c:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
   40:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
   44:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
-  48:	0c 94 68 01 	jmp	0x2d0	; 0x2d0 <__vector_18>
-  4c:	0c 94 96 01 	jmp	0x32c	; 0x32c <__vector_19>
+  48:	0c 94 3a 01 	jmp	0x274	; 0x274 <__vector_18>
+  4c:	0c 94 68 01 	jmp	0x2d0	; 0x2d0 <__vector_19>
   50:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
   54:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
   58:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
@@ -72,7 +72,7 @@ Disassembly of section .text:
   74:	11 e0       	ldi	r17, 0x01	; 1
   76:	a0 e0       	ldi	r26, 0x00	; 0
   78:	b1 e0       	ldi	r27, 0x01	; 1
-  7a:	ec ea       	ldi	r30, 0xAC	; 172
+  7a:	e0 e5       	ldi	r30, 0x50	; 80
   7c:	f3 e0       	ldi	r31, 0x03	; 3
   7e:	02 c0       	rjmp	.+4      	; 0x84 <__do_copy_data+0x10>
   80:	05 90       	lpm	r0, Z+
@@ -95,7 +95,7 @@ Disassembly of section .text:
   96:	b2 07       	cpc	r27, r18
   98:	e1 f7       	brne	.-8      	; 0x92 <.do_clear_bss_loop>
   9a:	0e 94 6c 00 	call	0xd8	; 0xd8 <main>
-  9e:	0c 94 d4 01 	jmp	0x3a8	; 0x3a8 <_exit>
+  9e:	0c 94 a6 01 	jmp	0x34c	; 0x34c <_exit>
 
 000000a2 <__bad_interrupt>:
   a2:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -300,164 +300,185 @@ ISR(TIMER0_COMPA_vect)
 		// return amplitude value based on currently pressed button
 		
 		//signal_amplitude = (sample_cnt_1);				  // sawwtooth signal generation
-		signal_amplitude = sinus_gen(&lookup_table, gen_sig_sample_id(&sample_cnt_1, 1000));	  // sinus gegeration test
+		signal_amplitude = lookup_table[gen_sig_sample_id(&sample_cnt_1, 1000)];
  1de:	68 ee       	ldi	r22, 0xE8	; 232
  1e0:	73 e0       	ldi	r23, 0x03	; 3
  1e2:	83 e8       	ldi	r24, 0x83	; 131
  1e4:	91 e0       	ldi	r25, 0x01	; 1
- 1e6:	0e 94 2e 01 	call	0x25c	; 0x25c <gen_sig_sample_id>
- 1ea:	bc 01       	movw	r22, r24
- 1ec:	80 e0       	ldi	r24, 0x00	; 0
- 1ee:	91 e0       	ldi	r25, 0x01	; 1
- 1f0:	0e 94 3b 01 	call	0x276	; 0x276 <sinus_gen>
- 1f4:	80 93 82 01 	sts	0x0182, r24	; 0x800182 <signal_amplitude.1994>
+ 1e6:	0e 94 2d 01 	call	0x25a	; 0x25a <gen_sig_sample_id>
+ 1ea:	80 50       	subi	r24, 0x00	; 0
+ 1ec:	9f 4f       	sbci	r25, 0xFF	; 255
+ 1ee:	fc 01       	movw	r30, r24
+ 1f0:	80 81       	ld	r24, Z
+ 1f2:	80 93 82 01 	sts	0x0182, r24	; 0x800182 <signal_amplitude.1994>
+		//signal_amplitude = sinus_gen(&lookup_table, gen_sig_sample_id(&sample_cnt_1, 1000));	  // sinus gegeration test
 		//keys are index from 0 to 15, thus row frquency (index 0-3) is given by: key/4; and and column frequency (index 4-7)  is given by: 4 + key % 4;
 		//signal_amplitude = (sinus_table[gen_sig_sample_id(&sample_cnt_1, &samples_set[key/4])] + sinus_table[gen_sig_sample_id(&sample_cnt_2, &samples_set[4 + (key % 4)])])/2;  
 		sample_cnt_1 = sample_cnt_1 + 1;
- 1f8:	20 91 83 01 	lds	r18, 0x0183	; 0x800183 <sample_cnt_1.1995>
- 1fc:	30 91 84 01 	lds	r19, 0x0184	; 0x800184 <sample_cnt_1.1995+0x1>
- 200:	2f 5f       	subi	r18, 0xFF	; 255
- 202:	3f 4f       	sbci	r19, 0xFF	; 255
- 204:	30 93 84 01 	sts	0x0184, r19	; 0x800184 <sample_cnt_1.1995+0x1>
- 208:	20 93 83 01 	sts	0x0183, r18	; 0x800183 <sample_cnt_1.1995>
+ 1f6:	20 91 83 01 	lds	r18, 0x0183	; 0x800183 <sample_cnt_1.1995>
+ 1fa:	30 91 84 01 	lds	r19, 0x0184	; 0x800184 <sample_cnt_1.1995+0x1>
+ 1fe:	2f 5f       	subi	r18, 0xFF	; 255
+ 200:	3f 4f       	sbci	r19, 0xFF	; 255
+ 202:	30 93 84 01 	sts	0x0184, r19	; 0x800184 <sample_cnt_1.1995+0x1>
+ 206:	20 93 83 01 	sts	0x0183, r18	; 0x800183 <sample_cnt_1.1995>
 		sample_cnt_2 = sample_cnt_2 + 1;
- 20c:	40 91 80 01 	lds	r20, 0x0180	; 0x800180 <__data_end>
- 210:	50 91 81 01 	lds	r21, 0x0181	; 0x800181 <__data_end+0x1>
- 214:	4f 5f       	subi	r20, 0xFF	; 255
- 216:	5f 4f       	sbci	r21, 0xFF	; 255
- 218:	50 93 81 01 	sts	0x0181, r21	; 0x800181 <__data_end+0x1>
- 21c:	40 93 80 01 	sts	0x0180, r20	; 0x800180 <__data_end>
+ 20a:	40 91 80 01 	lds	r20, 0x0180	; 0x800180 <__data_end>
+ 20e:	50 91 81 01 	lds	r21, 0x0181	; 0x800181 <__data_end+0x1>
+ 212:	4f 5f       	subi	r20, 0xFF	; 255
+ 214:	5f 4f       	sbci	r21, 0xFF	; 255
+ 216:	50 93 81 01 	sts	0x0181, r21	; 0x800181 <__data_end+0x1>
+ 21a:	40 93 80 01 	sts	0x0180, r20	; 0x800180 <__data_end>
 		if(sample_cnt_1 > 511) sample_cnt_1 = 0;		  // reseting counter, test purposes
- 220:	21 15       	cp	r18, r1
- 222:	32 40       	sbci	r19, 0x02	; 2
- 224:	20 f0       	brcs	.+8      	; 0x22e <__vector_14+0x72>
- 226:	10 92 84 01 	sts	0x0184, r1	; 0x800184 <sample_cnt_1.1995+0x1>
- 22a:	10 92 83 01 	sts	0x0183, r1	; 0x800183 <sample_cnt_1.1995>
+ 21e:	21 15       	cp	r18, r1
+ 220:	32 40       	sbci	r19, 0x02	; 2
+ 222:	20 f0       	brcs	.+8      	; 0x22c <__vector_14+0x70>
+ 224:	10 92 84 01 	sts	0x0184, r1	; 0x800184 <sample_cnt_1.1995+0x1>
+ 228:	10 92 83 01 	sts	0x0183, r1	; 0x800183 <sample_cnt_1.1995>
 		PORTB = signal_amplitude & 0b00111111;
- 22e:	8f 73       	andi	r24, 0x3F	; 63
- 230:	85 b9       	out	0x05, r24	; 5
+ 22c:	8f 73       	andi	r24, 0x3F	; 63
+ 22e:	85 b9       	out	0x05, r24	; 5
 		PORTD = signal_amplitude & 0b11000000;
- 232:	80 91 82 01 	lds	r24, 0x0182	; 0x800182 <signal_amplitude.1994>
- 236:	80 7c       	andi	r24, 0xC0	; 192
- 238:	8b b9       	out	0x0b, r24	; 11
+ 230:	80 91 82 01 	lds	r24, 0x0182	; 0x800182 <signal_amplitude.1994>
+ 234:	80 7c       	andi	r24, 0xC0	; 192
+ 236:	8b b9       	out	0x0b, r24	; 11
 }
- 23a:	ff 91       	pop	r31
- 23c:	ef 91       	pop	r30
- 23e:	bf 91       	pop	r27
- 240:	af 91       	pop	r26
- 242:	9f 91       	pop	r25
- 244:	8f 91       	pop	r24
- 246:	7f 91       	pop	r23
- 248:	6f 91       	pop	r22
- 24a:	5f 91       	pop	r21
- 24c:	4f 91       	pop	r20
- 24e:	3f 91       	pop	r19
- 250:	2f 91       	pop	r18
- 252:	0f 90       	pop	r0
- 254:	0f be       	out	0x3f, r0	; 63
- 256:	0f 90       	pop	r0
- 258:	1f 90       	pop	r1
- 25a:	18 95       	reti
+ 238:	ff 91       	pop	r31
+ 23a:	ef 91       	pop	r30
+ 23c:	bf 91       	pop	r27
+ 23e:	af 91       	pop	r26
+ 240:	9f 91       	pop	r25
+ 242:	8f 91       	pop	r24
+ 244:	7f 91       	pop	r23
+ 246:	6f 91       	pop	r22
+ 248:	5f 91       	pop	r21
+ 24a:	4f 91       	pop	r20
+ 24c:	3f 91       	pop	r19
+ 24e:	2f 91       	pop	r18
+ 250:	0f 90       	pop	r0
+ 252:	0f be       	out	0x3f, r0	; 63
+ 254:	0f 90       	pop	r0
+ 256:	1f 90       	pop	r1
+ 258:	18 95       	reti
 
-0000025c <gen_sig_sample_id>:
+0000025a <gen_sig_sample_id>:
 #include "signal_generator.h"
 
 /* Function definitions ----------------------------------------*/
 
 uint16_t gen_sig_sample_id(uint16_t *cnt, uint16_t freq)
 {
- 25c:	fc 01       	movw	r30, r24
+ 25a:	fc 01       	movw	r30, r24
 	uint8_t sample = 512*(195/freq);
 	uint16_t sample_out = ((*cnt/sample)*512) ;  // vypocet vzorku, ktery se ma zpracovat. Jelikoz je pouzity jako index v lookup table
- 25e:	80 81       	ld	r24, Z
- 260:	91 81       	ldd	r25, Z+1	; 0x01
- 262:	60 e0       	ldi	r22, 0x00	; 0
- 264:	70 e0       	ldi	r23, 0x00	; 0
- 266:	0e 94 c0 01 	call	0x380	; 0x380 <__udivmodhi4>
+ 25c:	80 81       	ld	r24, Z
+ 25e:	91 81       	ldd	r25, Z+1	; 0x01
+ 260:	60 e0       	ldi	r22, 0x00	; 0
+ 262:	70 e0       	ldi	r23, 0x00	; 0
+ 264:	0e 94 92 01 	call	0x324	; 0x324 <__udivmodhi4>
 	if(*cnt >= sample) *cnt = 0;
- 26a:	11 82       	std	Z+1, r1	; 0x01
- 26c:	10 82       	st	Z, r1
+ 268:	11 82       	std	Z+1, r1	; 0x01
+ 26a:	10 82       	st	Z, r1
 	return sample_out;
 }
- 26e:	80 e0       	ldi	r24, 0x00	; 0
- 270:	96 2f       	mov	r25, r22
- 272:	99 0f       	add	r25, r25
- 274:	08 95       	ret
+ 26c:	80 e0       	ldi	r24, 0x00	; 0
+ 26e:	96 2f       	mov	r25, r22
+ 270:	99 0f       	add	r25, r25
+ 272:	08 95       	ret
 
-00000276 <sinus_gen>:
-#include "sinus_gen.h"
-
-uint8_t sinus_gen(uint8_t *table, uint16_t sample)
-{
-	uint8_t out = 0;
-	if((sample >= 127) && (sample <= 255))
- 276:	9b 01       	movw	r18, r22
- 278:	2f 57       	subi	r18, 0x7F	; 127
- 27a:	31 09       	sbc	r19, r1
- 27c:	21 38       	cpi	r18, 0x81	; 129
- 27e:	31 05       	cpc	r19, r1
- 280:	40 f4       	brcc	.+16     	; 0x292 <sinus_gen+0x1c>
-	{
-		out = table[255-sample];
- 282:	9c 01       	movw	r18, r24
- 284:	26 1b       	sub	r18, r22
- 286:	37 0b       	sbc	r19, r23
- 288:	f9 01       	movw	r30, r18
- 28a:	e1 50       	subi	r30, 0x01	; 1
- 28c:	ff 4f       	sbci	r31, 0xFF	; 255
- 28e:	80 81       	ld	r24, Z
- 290:	08 95       	ret
-	}
-	else if ((sample >= 256) && (sample <= 383))
- 292:	9b 01       	movw	r18, r22
- 294:	3a 95       	dec	r19
- 296:	20 38       	cpi	r18, 0x80	; 128
- 298:	31 05       	cpc	r19, r1
- 29a:	30 f4       	brcc	.+12     	; 0x2a8 <sinus_gen+0x32>
-	{
-		out = -1*(table[sample - 256]);
- 29c:	fc 01       	movw	r30, r24
- 29e:	e2 0f       	add	r30, r18
- 2a0:	f3 1f       	adc	r31, r19
- 2a2:	80 81       	ld	r24, Z
- 2a4:	81 95       	neg	r24
- 2a6:	08 95       	ret
-	}
-	else if((sample >= 384) && (sample <= 511))
- 2a8:	9b 01       	movw	r18, r22
- 2aa:	20 58       	subi	r18, 0x80	; 128
- 2ac:	31 40       	sbci	r19, 0x01	; 1
- 2ae:	20 38       	cpi	r18, 0x80	; 128
- 2b0:	31 05       	cpc	r19, r1
- 2b2:	48 f4       	brcc	.+18     	; 0x2c6 <sinus_gen+0x50>
-	{
-		out = -1 * (table[511 - sample]);
- 2b4:	9c 01       	movw	r18, r24
- 2b6:	26 1b       	sub	r18, r22
- 2b8:	37 0b       	sbc	r19, r23
- 2ba:	f9 01       	movw	r30, r18
- 2bc:	e1 50       	subi	r30, 0x01	; 1
- 2be:	fe 4f       	sbci	r31, 0xFE	; 254
- 2c0:	80 81       	ld	r24, Z
- 2c2:	81 95       	neg	r24
- 2c4:	08 95       	ret
-	}
-	else
-	{
-		out = table[sample];
- 2c6:	fc 01       	movw	r30, r24
- 2c8:	e6 0f       	add	r30, r22
- 2ca:	f7 1f       	adc	r31, r23
- 2cc:	80 81       	ld	r24, Z
-	}
-	return out;
- 2ce:	08 95       	ret
-
-000002d0 <__vector_18>:
+00000274 <__vector_18>:
 
 /*************************************************************************
  * Function: UART Receive Complete interrupt
  * Purpose:  called when the UART has received a character
+ **************************************************************************/
+{
+ 274:	1f 92       	push	r1
+ 276:	0f 92       	push	r0
+ 278:	0f b6       	in	r0, 0x3f	; 63
+ 27a:	0f 92       	push	r0
+ 27c:	11 24       	eor	r1, r1
+ 27e:	2f 93       	push	r18
+ 280:	8f 93       	push	r24
+ 282:	9f 93       	push	r25
+ 284:	ef 93       	push	r30
+ 286:	ff 93       	push	r31
+    unsigned char usr;
+    unsigned char lastRxError = 0;
+
+
+    /* read UART status register and UART data register */
+    usr  = UART0_STATUS;
+ 288:	80 91 c0 00 	lds	r24, 0x00C0	; 0x8000c0 <__DATA_REGION_ORIGIN__+0x60>
+    data = UART0_DATA;
+ 28c:	20 91 c6 00 	lds	r18, 0x00C6	; 0x8000c6 <__DATA_REGION_ORIGIN__+0x66>
+
+    /* get FEn (Frame Error) DORn (Data OverRun) UPEn (USART Parity Error) bits */
+    #if defined(FE) && defined(DOR) && defined(UPE)
+    lastRxError = usr & (_BV(FE) | _BV(DOR) | _BV(UPE) );
+    #elif defined(FE0) && defined(DOR0) && defined(UPE0)
+    lastRxError = usr & (_BV(FE0) | _BV(DOR0) | _BV(UPE0) );
+ 290:	8c 71       	andi	r24, 0x1C	; 28
+    #elif defined(FE) && defined(DOR)
+    lastRxError = usr & (_BV(FE) | _BV(DOR) );
+    #endif
+
+    /* calculate buffer index */
+    tmphead = ( UART_RxHead + 1) & UART_RX_BUFFER_MASK;
+ 292:	e0 91 87 01 	lds	r30, 0x0187	; 0x800187 <UART_RxHead>
+ 296:	ef 5f       	subi	r30, 0xFF	; 255
+ 298:	ef 73       	andi	r30, 0x3F	; 63
+
+    if (tmphead == UART_RxTail)
+ 29a:	90 91 86 01 	lds	r25, 0x0186	; 0x800186 <UART_RxTail>
+ 29e:	e9 17       	cp	r30, r25
+ 2a0:	39 f0       	breq	.+14     	; 0x2b0 <__vector_18+0x3c>
+        lastRxError = UART_BUFFER_OVERFLOW >> 8;
+    }
+    else
+    {
+        /* store new index */
+        UART_RxHead = tmphead;
+ 2a2:	e0 93 87 01 	sts	0x0187, r30	; 0x800187 <UART_RxHead>
+        /* store received data in buffer */
+        UART_RxBuf[tmphead] = data;
+ 2a6:	f0 e0       	ldi	r31, 0x00	; 0
+ 2a8:	e6 57       	subi	r30, 0x76	; 118
+ 2aa:	fe 4f       	sbci	r31, 0xFE	; 254
+ 2ac:	20 83       	st	Z, r18
+ 2ae:	01 c0       	rjmp	.+2      	; 0x2b2 <__vector_18+0x3e>
+    tmphead = ( UART_RxHead + 1) & UART_RX_BUFFER_MASK;
+
+    if (tmphead == UART_RxTail)
+    {
+        /* error: receive buffer overflow */
+        lastRxError = UART_BUFFER_OVERFLOW >> 8;
+ 2b0:	82 e0       	ldi	r24, 0x02	; 2
+        /* store new index */
+        UART_RxHead = tmphead;
+        /* store received data in buffer */
+        UART_RxBuf[tmphead] = data;
+    }
+    UART_LastRxError |= lastRxError;
+ 2b2:	90 91 85 01 	lds	r25, 0x0185	; 0x800185 <UART_LastRxError>
+ 2b6:	89 2b       	or	r24, r25
+ 2b8:	80 93 85 01 	sts	0x0185, r24	; 0x800185 <UART_LastRxError>
+}
+ 2bc:	ff 91       	pop	r31
+ 2be:	ef 91       	pop	r30
+ 2c0:	9f 91       	pop	r25
+ 2c2:	8f 91       	pop	r24
+ 2c4:	2f 91       	pop	r18
+ 2c6:	0f 90       	pop	r0
+ 2c8:	0f be       	out	0x3f, r0	; 63
+ 2ca:	0f 90       	pop	r0
+ 2cc:	1f 90       	pop	r1
+ 2ce:	18 95       	reti
+
+000002d0 <__vector_19>:
+
+/*************************************************************************
+ * Function: UART Data Register Empty interrupt
+ * Purpose:  called when the UART is ready to transmit the next byte
  **************************************************************************/
 {
  2d0:	1f 92       	push	r1
@@ -465,173 +486,84 @@ uint8_t sinus_gen(uint8_t *table, uint16_t sample)
  2d4:	0f b6       	in	r0, 0x3f	; 63
  2d6:	0f 92       	push	r0
  2d8:	11 24       	eor	r1, r1
- 2da:	2f 93       	push	r18
- 2dc:	8f 93       	push	r24
- 2de:	9f 93       	push	r25
- 2e0:	ef 93       	push	r30
- 2e2:	ff 93       	push	r31
-    unsigned char usr;
-    unsigned char lastRxError = 0;
-
-
-    /* read UART status register and UART data register */
-    usr  = UART0_STATUS;
- 2e4:	80 91 c0 00 	lds	r24, 0x00C0	; 0x8000c0 <__DATA_REGION_ORIGIN__+0x60>
-    data = UART0_DATA;
- 2e8:	20 91 c6 00 	lds	r18, 0x00C6	; 0x8000c6 <__DATA_REGION_ORIGIN__+0x66>
-
-    /* get FEn (Frame Error) DORn (Data OverRun) UPEn (USART Parity Error) bits */
-    #if defined(FE) && defined(DOR) && defined(UPE)
-    lastRxError = usr & (_BV(FE) | _BV(DOR) | _BV(UPE) );
-    #elif defined(FE0) && defined(DOR0) && defined(UPE0)
-    lastRxError = usr & (_BV(FE0) | _BV(DOR0) | _BV(UPE0) );
- 2ec:	8c 71       	andi	r24, 0x1C	; 28
-    #elif defined(FE) && defined(DOR)
-    lastRxError = usr & (_BV(FE) | _BV(DOR) );
-    #endif
-
-    /* calculate buffer index */
-    tmphead = ( UART_RxHead + 1) & UART_RX_BUFFER_MASK;
- 2ee:	e0 91 87 01 	lds	r30, 0x0187	; 0x800187 <UART_RxHead>
- 2f2:	ef 5f       	subi	r30, 0xFF	; 255
- 2f4:	ef 73       	andi	r30, 0x3F	; 63
-
-    if (tmphead == UART_RxTail)
- 2f6:	90 91 86 01 	lds	r25, 0x0186	; 0x800186 <UART_RxTail>
- 2fa:	e9 17       	cp	r30, r25
- 2fc:	39 f0       	breq	.+14     	; 0x30c <__vector_18+0x3c>
-        lastRxError = UART_BUFFER_OVERFLOW >> 8;
-    }
-    else
-    {
-        /* store new index */
-        UART_RxHead = tmphead;
- 2fe:	e0 93 87 01 	sts	0x0187, r30	; 0x800187 <UART_RxHead>
-        /* store received data in buffer */
-        UART_RxBuf[tmphead] = data;
- 302:	f0 e0       	ldi	r31, 0x00	; 0
- 304:	e6 57       	subi	r30, 0x76	; 118
- 306:	fe 4f       	sbci	r31, 0xFE	; 254
- 308:	20 83       	st	Z, r18
- 30a:	01 c0       	rjmp	.+2      	; 0x30e <__vector_18+0x3e>
-    tmphead = ( UART_RxHead + 1) & UART_RX_BUFFER_MASK;
-
-    if (tmphead == UART_RxTail)
-    {
-        /* error: receive buffer overflow */
-        lastRxError = UART_BUFFER_OVERFLOW >> 8;
- 30c:	82 e0       	ldi	r24, 0x02	; 2
-        /* store new index */
-        UART_RxHead = tmphead;
-        /* store received data in buffer */
-        UART_RxBuf[tmphead] = data;
-    }
-    UART_LastRxError |= lastRxError;
- 30e:	90 91 85 01 	lds	r25, 0x0185	; 0x800185 <UART_LastRxError>
- 312:	89 2b       	or	r24, r25
- 314:	80 93 85 01 	sts	0x0185, r24	; 0x800185 <UART_LastRxError>
-}
- 318:	ff 91       	pop	r31
- 31a:	ef 91       	pop	r30
- 31c:	9f 91       	pop	r25
- 31e:	8f 91       	pop	r24
- 320:	2f 91       	pop	r18
- 322:	0f 90       	pop	r0
- 324:	0f be       	out	0x3f, r0	; 63
- 326:	0f 90       	pop	r0
- 328:	1f 90       	pop	r1
- 32a:	18 95       	reti
-
-0000032c <__vector_19>:
-
-/*************************************************************************
- * Function: UART Data Register Empty interrupt
- * Purpose:  called when the UART is ready to transmit the next byte
- **************************************************************************/
-{
- 32c:	1f 92       	push	r1
- 32e:	0f 92       	push	r0
- 330:	0f b6       	in	r0, 0x3f	; 63
- 332:	0f 92       	push	r0
- 334:	11 24       	eor	r1, r1
- 336:	8f 93       	push	r24
- 338:	9f 93       	push	r25
- 33a:	ef 93       	push	r30
- 33c:	ff 93       	push	r31
+ 2da:	8f 93       	push	r24
+ 2dc:	9f 93       	push	r25
+ 2de:	ef 93       	push	r30
+ 2e0:	ff 93       	push	r31
     unsigned char tmptail;
 
 
     if (UART_TxHead != UART_TxTail)
- 33e:	90 91 89 01 	lds	r25, 0x0189	; 0x800189 <UART_TxHead>
- 342:	80 91 88 01 	lds	r24, 0x0188	; 0x800188 <UART_TxTail>
- 346:	98 17       	cp	r25, r24
- 348:	69 f0       	breq	.+26     	; 0x364 <__vector_19+0x38>
+ 2e2:	90 91 89 01 	lds	r25, 0x0189	; 0x800189 <UART_TxHead>
+ 2e6:	80 91 88 01 	lds	r24, 0x0188	; 0x800188 <UART_TxTail>
+ 2ea:	98 17       	cp	r25, r24
+ 2ec:	69 f0       	breq	.+26     	; 0x308 <__vector_19+0x38>
     {
         /* calculate and store new buffer index */
         tmptail     = (UART_TxTail + 1) & UART_TX_BUFFER_MASK;
- 34a:	e0 91 88 01 	lds	r30, 0x0188	; 0x800188 <UART_TxTail>
- 34e:	ef 5f       	subi	r30, 0xFF	; 255
- 350:	ef 73       	andi	r30, 0x3F	; 63
+ 2ee:	e0 91 88 01 	lds	r30, 0x0188	; 0x800188 <UART_TxTail>
+ 2f2:	ef 5f       	subi	r30, 0xFF	; 255
+ 2f4:	ef 73       	andi	r30, 0x3F	; 63
         UART_TxTail = tmptail;
- 352:	e0 93 88 01 	sts	0x0188, r30	; 0x800188 <UART_TxTail>
+ 2f6:	e0 93 88 01 	sts	0x0188, r30	; 0x800188 <UART_TxTail>
         /* get one byte from buffer and write it to UART */
         UART0_DATA = UART_TxBuf[tmptail]; /* start transmission */
- 356:	f0 e0       	ldi	r31, 0x00	; 0
- 358:	e6 53       	subi	r30, 0x36	; 54
- 35a:	fe 4f       	sbci	r31, 0xFE	; 254
- 35c:	80 81       	ld	r24, Z
- 35e:	80 93 c6 00 	sts	0x00C6, r24	; 0x8000c6 <__DATA_REGION_ORIGIN__+0x66>
- 362:	05 c0       	rjmp	.+10     	; 0x36e <__vector_19+0x42>
+ 2fa:	f0 e0       	ldi	r31, 0x00	; 0
+ 2fc:	e6 53       	subi	r30, 0x36	; 54
+ 2fe:	fe 4f       	sbci	r31, 0xFE	; 254
+ 300:	80 81       	ld	r24, Z
+ 302:	80 93 c6 00 	sts	0x00C6, r24	; 0x8000c6 <__DATA_REGION_ORIGIN__+0x66>
+ 306:	05 c0       	rjmp	.+10     	; 0x312 <__vector_19+0x42>
     }
     else
     {
         /* tx buffer empty, disable UDRE interrupt */
         UART0_CONTROL &= ~_BV(UART0_UDRIE);
- 364:	e1 ec       	ldi	r30, 0xC1	; 193
- 366:	f0 e0       	ldi	r31, 0x00	; 0
- 368:	80 81       	ld	r24, Z
- 36a:	8f 7d       	andi	r24, 0xDF	; 223
- 36c:	80 83       	st	Z, r24
+ 308:	e1 ec       	ldi	r30, 0xC1	; 193
+ 30a:	f0 e0       	ldi	r31, 0x00	; 0
+ 30c:	80 81       	ld	r24, Z
+ 30e:	8f 7d       	andi	r24, 0xDF	; 223
+ 310:	80 83       	st	Z, r24
     }
 }
- 36e:	ff 91       	pop	r31
- 370:	ef 91       	pop	r30
- 372:	9f 91       	pop	r25
- 374:	8f 91       	pop	r24
- 376:	0f 90       	pop	r0
- 378:	0f be       	out	0x3f, r0	; 63
- 37a:	0f 90       	pop	r0
- 37c:	1f 90       	pop	r1
- 37e:	18 95       	reti
+ 312:	ff 91       	pop	r31
+ 314:	ef 91       	pop	r30
+ 316:	9f 91       	pop	r25
+ 318:	8f 91       	pop	r24
+ 31a:	0f 90       	pop	r0
+ 31c:	0f be       	out	0x3f, r0	; 63
+ 31e:	0f 90       	pop	r0
+ 320:	1f 90       	pop	r1
+ 322:	18 95       	reti
 
-00000380 <__udivmodhi4>:
- 380:	aa 1b       	sub	r26, r26
- 382:	bb 1b       	sub	r27, r27
- 384:	51 e1       	ldi	r21, 0x11	; 17
- 386:	07 c0       	rjmp	.+14     	; 0x396 <__udivmodhi4_ep>
+00000324 <__udivmodhi4>:
+ 324:	aa 1b       	sub	r26, r26
+ 326:	bb 1b       	sub	r27, r27
+ 328:	51 e1       	ldi	r21, 0x11	; 17
+ 32a:	07 c0       	rjmp	.+14     	; 0x33a <__udivmodhi4_ep>
 
-00000388 <__udivmodhi4_loop>:
- 388:	aa 1f       	adc	r26, r26
- 38a:	bb 1f       	adc	r27, r27
- 38c:	a6 17       	cp	r26, r22
- 38e:	b7 07       	cpc	r27, r23
- 390:	10 f0       	brcs	.+4      	; 0x396 <__udivmodhi4_ep>
- 392:	a6 1b       	sub	r26, r22
- 394:	b7 0b       	sbc	r27, r23
+0000032c <__udivmodhi4_loop>:
+ 32c:	aa 1f       	adc	r26, r26
+ 32e:	bb 1f       	adc	r27, r27
+ 330:	a6 17       	cp	r26, r22
+ 332:	b7 07       	cpc	r27, r23
+ 334:	10 f0       	brcs	.+4      	; 0x33a <__udivmodhi4_ep>
+ 336:	a6 1b       	sub	r26, r22
+ 338:	b7 0b       	sbc	r27, r23
 
-00000396 <__udivmodhi4_ep>:
- 396:	88 1f       	adc	r24, r24
- 398:	99 1f       	adc	r25, r25
- 39a:	5a 95       	dec	r21
- 39c:	a9 f7       	brne	.-22     	; 0x388 <__udivmodhi4_loop>
- 39e:	80 95       	com	r24
- 3a0:	90 95       	com	r25
- 3a2:	bc 01       	movw	r22, r24
- 3a4:	cd 01       	movw	r24, r26
- 3a6:	08 95       	ret
+0000033a <__udivmodhi4_ep>:
+ 33a:	88 1f       	adc	r24, r24
+ 33c:	99 1f       	adc	r25, r25
+ 33e:	5a 95       	dec	r21
+ 340:	a9 f7       	brne	.-22     	; 0x32c <__udivmodhi4_loop>
+ 342:	80 95       	com	r24
+ 344:	90 95       	com	r25
+ 346:	bc 01       	movw	r22, r24
+ 348:	cd 01       	movw	r24, r26
+ 34a:	08 95       	ret
 
-000003a8 <_exit>:
- 3a8:	f8 94       	cli
+0000034c <_exit>:
+ 34c:	f8 94       	cli
 
-000003aa <__stop_program>:
- 3aa:	ff cf       	rjmp	.-2      	; 0x3aa <__stop_program>
+0000034e <__stop_program>:
+ 34e:	ff cf       	rjmp	.-2      	; 0x34e <__stop_program>

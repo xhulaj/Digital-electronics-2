@@ -3,31 +3,31 @@ GccApplication1.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000080  00800100  00000386  0000041a  2**0
+  0 .data         00000080  00800100  000003e6  0000047a  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000386  00000000  00000000  00000094  2**1
+  1 .text         000003e6  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000088  00800180  00800180  0000049a  2**0
+  2 .bss          0000008a  00800180  00800180  000004fa  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  0000049a  2**0
+  3 .comment      00000030  00000000  00000000  000004fa  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  000004cc  2**2
+  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  0000052c  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 000000e8  00000000  00000000  0000050c  2**0
+  5 .debug_aranges 000000e8  00000000  00000000  0000056c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00000f5e  00000000  00000000  000005f4  2**0
+  6 .debug_info   00000fce  00000000  00000000  00000654  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 000008d6  00000000  00000000  00001552  2**0
+  7 .debug_abbrev 000008d6  00000000  00000000  00001622  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   000006c7  00000000  00000000  00001e28  2**0
+  8 .debug_line   000006e5  00000000  00000000  00001ef8  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000204  00000000  00000000  000024f0  2**2
+  9 .debug_frame  00000218  00000000  00000000  000025e0  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00000589  00000000  00000000  000026f4  2**0
+ 10 .debug_str    000005a4  00000000  00000000  000027f8  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00000598  00000000  00000000  00002c7d  2**0
+ 11 .debug_loc    000005f0  00000000  00000000  00002d9c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 000000c0  00000000  00000000  00003215  2**0
+ 12 .debug_ranges 000000c0  00000000  00000000  0000338c  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -51,8 +51,8 @@ Disassembly of section .text:
   3c:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
   40:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
   44:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
-  48:	0c 94 5a 01 	jmp	0x2b4	; 0x2b4 <__vector_18>
-  4c:	0c 94 88 01 	jmp	0x310	; 0x310 <__vector_19>
+  48:	0c 94 8a 01 	jmp	0x314	; 0x314 <__vector_18>
+  4c:	0c 94 b8 01 	jmp	0x370	; 0x370 <__vector_19>
   50:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
   54:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
   58:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
@@ -72,7 +72,7 @@ Disassembly of section .text:
   74:	11 e0       	ldi	r17, 0x01	; 1
   76:	a0 e0       	ldi	r26, 0x00	; 0
   78:	b1 e0       	ldi	r27, 0x01	; 1
-  7a:	e6 e8       	ldi	r30, 0x86	; 134
+  7a:	e6 ee       	ldi	r30, 0xE6	; 230
   7c:	f3 e0       	ldi	r31, 0x03	; 3
   7e:	02 c0       	rjmp	.+4      	; 0x84 <__do_copy_data+0x10>
   80:	05 90       	lpm	r0, Z+
@@ -91,11 +91,11 @@ Disassembly of section .text:
   92:	1d 92       	st	X+, r1
 
 00000094 <.do_clear_bss_start>:
-  94:	a8 30       	cpi	r26, 0x08	; 8
+  94:	aa 30       	cpi	r26, 0x0A	; 10
   96:	b2 07       	cpc	r27, r18
   98:	e1 f7       	brne	.-8      	; 0x92 <.do_clear_bss_loop>
   9a:	0e 94 6c 00 	call	0xd8	; 0xd8 <main>
-  9e:	0c 94 c1 01 	jmp	0x382	; 0x382 <_exit>
+  9e:	0c 94 f1 01 	jmp	0x3e2	; 0x3e2 <_exit>
 
 000000a2 <__bad_interrupt>:
   a2:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -283,341 +283,394 @@ ISR(TIMER0_COMPA_vect)
  1c0:	0f b6       	in	r0, 0x3f	; 63
  1c2:	0f 92       	push	r0
  1c4:	11 24       	eor	r1, r1
- 1c6:	2f 93       	push	r18
- 1c8:	3f 93       	push	r19
- 1ca:	4f 93       	push	r20
- 1cc:	5f 93       	push	r21
- 1ce:	6f 93       	push	r22
- 1d0:	7f 93       	push	r23
- 1d2:	8f 93       	push	r24
- 1d4:	9f 93       	push	r25
- 1d6:	af 93       	push	r26
- 1d8:	bf 93       	push	r27
- 1da:	ef 93       	push	r30
- 1dc:	ff 93       	push	r31
-	static uint16_t sample_cnt_1 = 0;
-	
-	static uint16_t generovanafrekvence = 1000;
-	
-	uint16_t sample = 100000/generovanafrekvence;	
-	sample_out = (512*sample_cnt_1/sample);  // vzorek ktery se ma aktualne vycist
- 1de:	40 91 81 01 	lds	r20, 0x0181	; 0x800181 <sample_cnt_1.1993>
- 1e2:	50 91 82 01 	lds	r21, 0x0182	; 0x800182 <sample_cnt_1.1993+0x1>
- 1e6:	9a 01       	movw	r18, r20
- 1e8:	32 2f       	mov	r19, r18
- 1ea:	22 27       	eor	r18, r18
- 1ec:	33 0f       	add	r19, r19
- 1ee:	36 95       	lsr	r19
- 1f0:	27 95       	ror	r18
- 1f2:	36 95       	lsr	r19
- 1f4:	27 95       	ror	r18
- 1f6:	ab e7       	ldi	r26, 0x7B	; 123
- 1f8:	b4 e1       	ldi	r27, 0x14	; 20
- 1fa:	0e 94 b2 01 	call	0x364	; 0x364 <__umulhisi3>
- 1fe:	bc 01       	movw	r22, r24
- 200:	76 95       	lsr	r23
- 202:	67 95       	ror	r22
+ 1c6:	0f 93       	push	r16
+ 1c8:	1f 93       	push	r17
+ 1ca:	2f 93       	push	r18
+ 1cc:	3f 93       	push	r19
+ 1ce:	4f 93       	push	r20
+ 1d0:	5f 93       	push	r21
+ 1d2:	6f 93       	push	r22
+ 1d4:	7f 93       	push	r23
+ 1d6:	8f 93       	push	r24
+ 1d8:	9f 93       	push	r25
+ 1da:	af 93       	push	r26
+ 1dc:	bf 93       	push	r27
+ 1de:	cf 93       	push	r28
+ 1e0:	df 93       	push	r29
+ 1e2:	ef 93       	push	r30
+ 1e4:	ff 93       	push	r31
+	static uint16_t sample_cnt_1 = 0; //counter
+	static uint16_t sample_cnt_2 = 0; //counter
 	
 	
+	
+	sample_out = (SIN_SAM*sample_cnt_1/sample); // sample that will be read from table	
+ 1e6:	40 91 83 01 	lds	r20, 0x0183	; 0x800183 <sample_cnt_1.1998>
+ 1ea:	50 91 84 01 	lds	r21, 0x0184	; 0x800184 <sample_cnt_1.1998+0x1>
+ 1ee:	9a 01       	movw	r18, r20
+ 1f0:	32 2f       	mov	r19, r18
+ 1f2:	22 27       	eor	r18, r18
+ 1f4:	33 0f       	add	r19, r19
+ 1f6:	36 95       	lsr	r19
+ 1f8:	27 95       	ror	r18
+ 1fa:	36 95       	lsr	r19
+ 1fc:	27 95       	ror	r18
+ 1fe:	ab e7       	ldi	r26, 0x7B	; 123
+ 200:	b4 e1       	ldi	r27, 0x14	; 20
+ 202:	0e 94 e2 01 	call	0x3c4	; 0x3c4 <__umulhisi3>
+ 206:	8c 01       	movw	r16, r24
+ 208:	16 95       	lsr	r17
+ 20a:	07 95       	ror	r16
+	sample_out2 = (SIN_SAM*sample_cnt_2/sample2); // sample that will be read from table
+ 20c:	e0 91 81 01 	lds	r30, 0x0181	; 0x800181 <sample_cnt_2.1999>
+ 210:	f0 91 82 01 	lds	r31, 0x0182	; 0x800182 <sample_cnt_2.1999+0x1>
+ 214:	9f 01       	movw	r18, r30
+ 216:	32 2f       	mov	r19, r18
+ 218:	22 27       	eor	r18, r18
+ 21a:	33 0f       	add	r19, r19
+ 21c:	36 95       	lsr	r19
+ 21e:	27 95       	ror	r18
+ 220:	0e 94 e2 01 	call	0x3c4	; 0x3c4 <__umulhisi3>
+ 224:	ec 01       	movw	r28, r24
+ 226:	d6 95       	lsr	r29
+ 228:	c7 95       	ror	r28
+	
+	//reseting counter 
 	sample_cnt_1 ++;
- 204:	4f 5f       	subi	r20, 0xFF	; 255
- 206:	5f 4f       	sbci	r21, 0xFF	; 255
+ 22a:	4f 5f       	subi	r20, 0xFF	; 255
+ 22c:	5f 4f       	sbci	r21, 0xFF	; 255
 	if(sample_cnt_1 >= sample){
- 208:	44 36       	cpi	r20, 0x64	; 100
- 20a:	51 05       	cpc	r21, r1
- 20c:	28 f4       	brcc	.+10     	; 0x218 <__vector_14+0x5c>
+ 22e:	44 36       	cpi	r20, 0x64	; 100
+ 230:	51 05       	cpc	r21, r1
+ 232:	28 f4       	brcc	.+10     	; 0x23e <__vector_14+0x82>
 	
-	uint16_t sample = 100000/generovanafrekvence;	
-	sample_out = (512*sample_cnt_1/sample);  // vzorek ktery se ma aktualne vycist
+	sample_out = (SIN_SAM*sample_cnt_1/sample); // sample that will be read from table	
+	sample_out2 = (SIN_SAM*sample_cnt_2/sample2); // sample that will be read from table
 	
-	
+	//reseting counter 
 	sample_cnt_1 ++;
- 20e:	50 93 82 01 	sts	0x0182, r21	; 0x800182 <sample_cnt_1.1993+0x1>
- 212:	40 93 81 01 	sts	0x0181, r20	; 0x800181 <sample_cnt_1.1993>
- 216:	04 c0       	rjmp	.+8      	; 0x220 <__vector_14+0x64>
+ 234:	50 93 84 01 	sts	0x0184, r21	; 0x800184 <sample_cnt_1.1998+0x1>
+ 238:	40 93 83 01 	sts	0x0183, r20	; 0x800183 <sample_cnt_1.1998>
+ 23c:	04 c0       	rjmp	.+8      	; 0x246 <__vector_14+0x8a>
 	if(sample_cnt_1 >= sample){
 		sample_cnt_1 = 0;		
- 218:	10 92 82 01 	sts	0x0182, r1	; 0x800182 <sample_cnt_1.1993+0x1>
- 21c:	10 92 81 01 	sts	0x0181, r1	; 0x800181 <sample_cnt_1.1993>
+ 23e:	10 92 84 01 	sts	0x0184, r1	; 0x800184 <sample_cnt_1.1998+0x1>
+ 242:	10 92 83 01 	sts	0x0183, r1	; 0x800183 <sample_cnt_1.1998>
+	}
+	//reseting counter 
+	sample_cnt_2 ++;
+ 246:	31 96       	adiw	r30, 0x01	; 1
+	if(sample_cnt_2 >= sample2){
+ 248:	e2 33       	cpi	r30, 0x32	; 50
+ 24a:	f1 05       	cpc	r31, r1
+ 24c:	28 f4       	brcc	.+10     	; 0x258 <__vector_14+0x9c>
+	sample_cnt_1 ++;
+	if(sample_cnt_1 >= sample){
+		sample_cnt_1 = 0;		
+	}
+	//reseting counter 
+	sample_cnt_2 ++;
+ 24e:	f0 93 82 01 	sts	0x0182, r31	; 0x800182 <sample_cnt_2.1999+0x1>
+ 252:	e0 93 81 01 	sts	0x0181, r30	; 0x800181 <sample_cnt_2.1999>
+ 256:	04 c0       	rjmp	.+8      	; 0x260 <__vector_14+0xa4>
+	if(sample_cnt_2 >= sample2){
+		sample_cnt_2 = 0;
+ 258:	10 92 82 01 	sts	0x0182, r1	; 0x800182 <sample_cnt_2.1999+0x1>
+ 25c:	10 92 81 01 	sts	0x0181, r1	; 0x800181 <sample_cnt_2.1999>
 	}
 	
-	//signal_amplitude = sample_out/2;
-	signal_amplitude = sinus_gen(&lookup_table, sample_out);
- 220:	80 e0       	ldi	r24, 0x00	; 0
- 222:	91 e0       	ldi	r25, 0x01	; 1
- 224:	0e 94 2d 01 	call	0x25a	; 0x25a <sinus_gen>
- 228:	80 93 80 01 	sts	0x0180, r24	; 0x800180 <__data_end>
-		sample_cnt_1 = 0;
-	*/
+	//signal_amplitude = sample_out/2; //generovani pila
+	signal_amplitude = (sinus_gen(&lookup_table, sample_out) + sinus_gen(&lookup_table, sample_out2))/2; //generovani sinus
+ 260:	b8 01       	movw	r22, r16
+ 262:	80 e0       	ldi	r24, 0x00	; 0
+ 264:	91 e0       	ldi	r25, 0x01	; 1
+ 266:	0e 94 5d 01 	call	0x2ba	; 0x2ba <sinus_gen>
+ 26a:	18 2f       	mov	r17, r24
+ 26c:	be 01       	movw	r22, r28
+ 26e:	80 e0       	ldi	r24, 0x00	; 0
+ 270:	91 e0       	ldi	r25, 0x01	; 1
+ 272:	0e 94 5d 01 	call	0x2ba	; 0x2ba <sinus_gen>
+ 276:	90 e0       	ldi	r25, 0x00	; 0
+ 278:	81 0f       	add	r24, r17
+ 27a:	91 1d       	adc	r25, r1
+ 27c:	95 95       	asr	r25
+ 27e:	87 95       	ror	r24
+ 280:	80 93 80 01 	sts	0x0180, r24	; 0x800180 <__data_end>
+		
+	
 		
 	//GPIO_toggle(&PORTC, PC0);
 	
 	PORTB = signal_amplitude & 0b00111111;
- 22c:	8f 73       	andi	r24, 0x3F	; 63
- 22e:	85 b9       	out	0x05, r24	; 5
+ 284:	8f 73       	andi	r24, 0x3F	; 63
+ 286:	85 b9       	out	0x05, r24	; 5
 	PORTD = signal_amplitude & 0b11000000;
- 230:	80 91 80 01 	lds	r24, 0x0180	; 0x800180 <__data_end>
- 234:	80 7c       	andi	r24, 0xC0	; 192
- 236:	8b b9       	out	0x0b, r24	; 11
+ 288:	80 91 80 01 	lds	r24, 0x0180	; 0x800180 <__data_end>
+ 28c:	80 7c       	andi	r24, 0xC0	; 192
+ 28e:	8b b9       	out	0x0b, r24	; 11
 	
 }
- 238:	ff 91       	pop	r31
- 23a:	ef 91       	pop	r30
- 23c:	bf 91       	pop	r27
- 23e:	af 91       	pop	r26
- 240:	9f 91       	pop	r25
- 242:	8f 91       	pop	r24
- 244:	7f 91       	pop	r23
- 246:	6f 91       	pop	r22
- 248:	5f 91       	pop	r21
- 24a:	4f 91       	pop	r20
- 24c:	3f 91       	pop	r19
- 24e:	2f 91       	pop	r18
- 250:	0f 90       	pop	r0
- 252:	0f be       	out	0x3f, r0	; 63
- 254:	0f 90       	pop	r0
- 256:	1f 90       	pop	r1
- 258:	18 95       	reti
+ 290:	ff 91       	pop	r31
+ 292:	ef 91       	pop	r30
+ 294:	df 91       	pop	r29
+ 296:	cf 91       	pop	r28
+ 298:	bf 91       	pop	r27
+ 29a:	af 91       	pop	r26
+ 29c:	9f 91       	pop	r25
+ 29e:	8f 91       	pop	r24
+ 2a0:	7f 91       	pop	r23
+ 2a2:	6f 91       	pop	r22
+ 2a4:	5f 91       	pop	r21
+ 2a6:	4f 91       	pop	r20
+ 2a8:	3f 91       	pop	r19
+ 2aa:	2f 91       	pop	r18
+ 2ac:	1f 91       	pop	r17
+ 2ae:	0f 91       	pop	r16
+ 2b0:	0f 90       	pop	r0
+ 2b2:	0f be       	out	0x3f, r0	; 63
+ 2b4:	0f 90       	pop	r0
+ 2b6:	1f 90       	pop	r1
+ 2b8:	18 95       	reti
 
-0000025a <sinus_gen>:
+000002ba <sinus_gen>:
 #include "sinus_gen.h"
 
 uint8_t sinus_gen(uint8_t *table, uint16_t sample)
 {
 	uint8_t out = 0;
 	if((sample >= 127) && (sample <= 255))
- 25a:	9b 01       	movw	r18, r22
- 25c:	2f 57       	subi	r18, 0x7F	; 127
- 25e:	31 09       	sbc	r19, r1
- 260:	21 38       	cpi	r18, 0x81	; 129
- 262:	31 05       	cpc	r19, r1
- 264:	40 f4       	brcc	.+16     	; 0x276 <sinus_gen+0x1c>
+ 2ba:	9b 01       	movw	r18, r22
+ 2bc:	2f 57       	subi	r18, 0x7F	; 127
+ 2be:	31 09       	sbc	r19, r1
+ 2c0:	21 38       	cpi	r18, 0x81	; 129
+ 2c2:	31 05       	cpc	r19, r1
+ 2c4:	40 f4       	brcc	.+16     	; 0x2d6 <sinus_gen+0x1c>
 	{
 		out = table[255-sample];
- 266:	9c 01       	movw	r18, r24
- 268:	26 1b       	sub	r18, r22
- 26a:	37 0b       	sbc	r19, r23
- 26c:	f9 01       	movw	r30, r18
- 26e:	e1 50       	subi	r30, 0x01	; 1
- 270:	ff 4f       	sbci	r31, 0xFF	; 255
- 272:	80 81       	ld	r24, Z
- 274:	08 95       	ret
+ 2c6:	9c 01       	movw	r18, r24
+ 2c8:	26 1b       	sub	r18, r22
+ 2ca:	37 0b       	sbc	r19, r23
+ 2cc:	f9 01       	movw	r30, r18
+ 2ce:	e1 50       	subi	r30, 0x01	; 1
+ 2d0:	ff 4f       	sbci	r31, 0xFF	; 255
+ 2d2:	80 81       	ld	r24, Z
+ 2d4:	08 95       	ret
 	}
 	else if ((sample >= 256) && (sample <= 383))
- 276:	9b 01       	movw	r18, r22
- 278:	3a 95       	dec	r19
- 27a:	20 38       	cpi	r18, 0x80	; 128
- 27c:	31 05       	cpc	r19, r1
- 27e:	30 f4       	brcc	.+12     	; 0x28c <sinus_gen+0x32>
+ 2d6:	9b 01       	movw	r18, r22
+ 2d8:	3a 95       	dec	r19
+ 2da:	20 38       	cpi	r18, 0x80	; 128
+ 2dc:	31 05       	cpc	r19, r1
+ 2de:	30 f4       	brcc	.+12     	; 0x2ec <sinus_gen+0x32>
 	{
 		out = -1*(table[sample - 256]);
- 280:	fc 01       	movw	r30, r24
- 282:	e2 0f       	add	r30, r18
- 284:	f3 1f       	adc	r31, r19
- 286:	80 81       	ld	r24, Z
- 288:	81 95       	neg	r24
- 28a:	08 95       	ret
+ 2e0:	fc 01       	movw	r30, r24
+ 2e2:	e2 0f       	add	r30, r18
+ 2e4:	f3 1f       	adc	r31, r19
+ 2e6:	80 81       	ld	r24, Z
+ 2e8:	81 95       	neg	r24
+ 2ea:	08 95       	ret
 	}
 	else if((sample >= 384) && (sample <= 511))
- 28c:	9b 01       	movw	r18, r22
- 28e:	20 58       	subi	r18, 0x80	; 128
- 290:	31 40       	sbci	r19, 0x01	; 1
- 292:	20 38       	cpi	r18, 0x80	; 128
- 294:	31 05       	cpc	r19, r1
- 296:	48 f4       	brcc	.+18     	; 0x2aa <sinus_gen+0x50>
+ 2ec:	9b 01       	movw	r18, r22
+ 2ee:	20 58       	subi	r18, 0x80	; 128
+ 2f0:	31 40       	sbci	r19, 0x01	; 1
+ 2f2:	20 38       	cpi	r18, 0x80	; 128
+ 2f4:	31 05       	cpc	r19, r1
+ 2f6:	48 f4       	brcc	.+18     	; 0x30a <sinus_gen+0x50>
 	{
 		out = -1 * (table[511 - sample]);
- 298:	9c 01       	movw	r18, r24
- 29a:	26 1b       	sub	r18, r22
- 29c:	37 0b       	sbc	r19, r23
- 29e:	f9 01       	movw	r30, r18
- 2a0:	e1 50       	subi	r30, 0x01	; 1
- 2a2:	fe 4f       	sbci	r31, 0xFE	; 254
- 2a4:	80 81       	ld	r24, Z
- 2a6:	81 95       	neg	r24
- 2a8:	08 95       	ret
+ 2f8:	9c 01       	movw	r18, r24
+ 2fa:	26 1b       	sub	r18, r22
+ 2fc:	37 0b       	sbc	r19, r23
+ 2fe:	f9 01       	movw	r30, r18
+ 300:	e1 50       	subi	r30, 0x01	; 1
+ 302:	fe 4f       	sbci	r31, 0xFE	; 254
+ 304:	80 81       	ld	r24, Z
+ 306:	81 95       	neg	r24
+ 308:	08 95       	ret
 	}
 	else
 	{
 		out = table[sample];
- 2aa:	fc 01       	movw	r30, r24
- 2ac:	e6 0f       	add	r30, r22
- 2ae:	f7 1f       	adc	r31, r23
- 2b0:	80 81       	ld	r24, Z
+ 30a:	fc 01       	movw	r30, r24
+ 30c:	e6 0f       	add	r30, r22
+ 30e:	f7 1f       	adc	r31, r23
+ 310:	80 81       	ld	r24, Z
 	}
 	return out;
- 2b2:	08 95       	ret
+ 312:	08 95       	ret
 
-000002b4 <__vector_18>:
+00000314 <__vector_18>:
 
 /*************************************************************************
  * Function: UART Receive Complete interrupt
  * Purpose:  called when the UART has received a character
  **************************************************************************/
 {
- 2b4:	1f 92       	push	r1
- 2b6:	0f 92       	push	r0
- 2b8:	0f b6       	in	r0, 0x3f	; 63
- 2ba:	0f 92       	push	r0
- 2bc:	11 24       	eor	r1, r1
- 2be:	2f 93       	push	r18
- 2c0:	8f 93       	push	r24
- 2c2:	9f 93       	push	r25
- 2c4:	ef 93       	push	r30
- 2c6:	ff 93       	push	r31
+ 314:	1f 92       	push	r1
+ 316:	0f 92       	push	r0
+ 318:	0f b6       	in	r0, 0x3f	; 63
+ 31a:	0f 92       	push	r0
+ 31c:	11 24       	eor	r1, r1
+ 31e:	2f 93       	push	r18
+ 320:	8f 93       	push	r24
+ 322:	9f 93       	push	r25
+ 324:	ef 93       	push	r30
+ 326:	ff 93       	push	r31
     unsigned char usr;
     unsigned char lastRxError = 0;
 
 
     /* read UART status register and UART data register */
     usr  = UART0_STATUS;
- 2c8:	80 91 c0 00 	lds	r24, 0x00C0	; 0x8000c0 <__DATA_REGION_ORIGIN__+0x60>
+ 328:	80 91 c0 00 	lds	r24, 0x00C0	; 0x8000c0 <__DATA_REGION_ORIGIN__+0x60>
     data = UART0_DATA;
- 2cc:	20 91 c6 00 	lds	r18, 0x00C6	; 0x8000c6 <__DATA_REGION_ORIGIN__+0x66>
+ 32c:	20 91 c6 00 	lds	r18, 0x00C6	; 0x8000c6 <__DATA_REGION_ORIGIN__+0x66>
 
     /* get FEn (Frame Error) DORn (Data OverRun) UPEn (USART Parity Error) bits */
     #if defined(FE) && defined(DOR) && defined(UPE)
     lastRxError = usr & (_BV(FE) | _BV(DOR) | _BV(UPE) );
     #elif defined(FE0) && defined(DOR0) && defined(UPE0)
     lastRxError = usr & (_BV(FE0) | _BV(DOR0) | _BV(UPE0) );
- 2d0:	8c 71       	andi	r24, 0x1C	; 28
+ 330:	8c 71       	andi	r24, 0x1C	; 28
     #elif defined(FE) && defined(DOR)
     lastRxError = usr & (_BV(FE) | _BV(DOR) );
     #endif
 
     /* calculate buffer index */
     tmphead = ( UART_RxHead + 1) & UART_RX_BUFFER_MASK;
- 2d2:	e0 91 85 01 	lds	r30, 0x0185	; 0x800185 <UART_RxHead>
- 2d6:	ef 5f       	subi	r30, 0xFF	; 255
- 2d8:	ef 73       	andi	r30, 0x3F	; 63
+ 332:	e0 91 87 01 	lds	r30, 0x0187	; 0x800187 <UART_RxHead>
+ 336:	ef 5f       	subi	r30, 0xFF	; 255
+ 338:	ef 73       	andi	r30, 0x3F	; 63
 
     if (tmphead == UART_RxTail)
- 2da:	90 91 84 01 	lds	r25, 0x0184	; 0x800184 <UART_RxTail>
- 2de:	e9 17       	cp	r30, r25
- 2e0:	39 f0       	breq	.+14     	; 0x2f0 <__vector_18+0x3c>
+ 33a:	90 91 86 01 	lds	r25, 0x0186	; 0x800186 <UART_RxTail>
+ 33e:	e9 17       	cp	r30, r25
+ 340:	39 f0       	breq	.+14     	; 0x350 <__vector_18+0x3c>
         lastRxError = UART_BUFFER_OVERFLOW >> 8;
     }
     else
     {
         /* store new index */
         UART_RxHead = tmphead;
- 2e2:	e0 93 85 01 	sts	0x0185, r30	; 0x800185 <UART_RxHead>
+ 342:	e0 93 87 01 	sts	0x0187, r30	; 0x800187 <UART_RxHead>
         /* store received data in buffer */
         UART_RxBuf[tmphead] = data;
- 2e6:	f0 e0       	ldi	r31, 0x00	; 0
- 2e8:	e8 57       	subi	r30, 0x78	; 120
- 2ea:	fe 4f       	sbci	r31, 0xFE	; 254
- 2ec:	20 83       	st	Z, r18
- 2ee:	01 c0       	rjmp	.+2      	; 0x2f2 <__vector_18+0x3e>
+ 346:	f0 e0       	ldi	r31, 0x00	; 0
+ 348:	e6 57       	subi	r30, 0x76	; 118
+ 34a:	fe 4f       	sbci	r31, 0xFE	; 254
+ 34c:	20 83       	st	Z, r18
+ 34e:	01 c0       	rjmp	.+2      	; 0x352 <__vector_18+0x3e>
     tmphead = ( UART_RxHead + 1) & UART_RX_BUFFER_MASK;
 
     if (tmphead == UART_RxTail)
     {
         /* error: receive buffer overflow */
         lastRxError = UART_BUFFER_OVERFLOW >> 8;
- 2f0:	82 e0       	ldi	r24, 0x02	; 2
+ 350:	82 e0       	ldi	r24, 0x02	; 2
         /* store new index */
         UART_RxHead = tmphead;
         /* store received data in buffer */
         UART_RxBuf[tmphead] = data;
     }
     UART_LastRxError |= lastRxError;
- 2f2:	90 91 83 01 	lds	r25, 0x0183	; 0x800183 <UART_LastRxError>
- 2f6:	89 2b       	or	r24, r25
- 2f8:	80 93 83 01 	sts	0x0183, r24	; 0x800183 <UART_LastRxError>
+ 352:	90 91 85 01 	lds	r25, 0x0185	; 0x800185 <UART_LastRxError>
+ 356:	89 2b       	or	r24, r25
+ 358:	80 93 85 01 	sts	0x0185, r24	; 0x800185 <UART_LastRxError>
 }
- 2fc:	ff 91       	pop	r31
- 2fe:	ef 91       	pop	r30
- 300:	9f 91       	pop	r25
- 302:	8f 91       	pop	r24
- 304:	2f 91       	pop	r18
- 306:	0f 90       	pop	r0
- 308:	0f be       	out	0x3f, r0	; 63
- 30a:	0f 90       	pop	r0
- 30c:	1f 90       	pop	r1
- 30e:	18 95       	reti
+ 35c:	ff 91       	pop	r31
+ 35e:	ef 91       	pop	r30
+ 360:	9f 91       	pop	r25
+ 362:	8f 91       	pop	r24
+ 364:	2f 91       	pop	r18
+ 366:	0f 90       	pop	r0
+ 368:	0f be       	out	0x3f, r0	; 63
+ 36a:	0f 90       	pop	r0
+ 36c:	1f 90       	pop	r1
+ 36e:	18 95       	reti
 
-00000310 <__vector_19>:
+00000370 <__vector_19>:
 
 /*************************************************************************
  * Function: UART Data Register Empty interrupt
  * Purpose:  called when the UART is ready to transmit the next byte
  **************************************************************************/
 {
- 310:	1f 92       	push	r1
- 312:	0f 92       	push	r0
- 314:	0f b6       	in	r0, 0x3f	; 63
- 316:	0f 92       	push	r0
- 318:	11 24       	eor	r1, r1
- 31a:	8f 93       	push	r24
- 31c:	9f 93       	push	r25
- 31e:	ef 93       	push	r30
- 320:	ff 93       	push	r31
+ 370:	1f 92       	push	r1
+ 372:	0f 92       	push	r0
+ 374:	0f b6       	in	r0, 0x3f	; 63
+ 376:	0f 92       	push	r0
+ 378:	11 24       	eor	r1, r1
+ 37a:	8f 93       	push	r24
+ 37c:	9f 93       	push	r25
+ 37e:	ef 93       	push	r30
+ 380:	ff 93       	push	r31
     unsigned char tmptail;
 
 
     if (UART_TxHead != UART_TxTail)
- 322:	90 91 87 01 	lds	r25, 0x0187	; 0x800187 <UART_TxHead>
- 326:	80 91 86 01 	lds	r24, 0x0186	; 0x800186 <UART_TxTail>
- 32a:	98 17       	cp	r25, r24
- 32c:	69 f0       	breq	.+26     	; 0x348 <__vector_19+0x38>
+ 382:	90 91 89 01 	lds	r25, 0x0189	; 0x800189 <UART_TxHead>
+ 386:	80 91 88 01 	lds	r24, 0x0188	; 0x800188 <UART_TxTail>
+ 38a:	98 17       	cp	r25, r24
+ 38c:	69 f0       	breq	.+26     	; 0x3a8 <__vector_19+0x38>
     {
         /* calculate and store new buffer index */
         tmptail     = (UART_TxTail + 1) & UART_TX_BUFFER_MASK;
- 32e:	e0 91 86 01 	lds	r30, 0x0186	; 0x800186 <UART_TxTail>
- 332:	ef 5f       	subi	r30, 0xFF	; 255
- 334:	ef 73       	andi	r30, 0x3F	; 63
+ 38e:	e0 91 88 01 	lds	r30, 0x0188	; 0x800188 <UART_TxTail>
+ 392:	ef 5f       	subi	r30, 0xFF	; 255
+ 394:	ef 73       	andi	r30, 0x3F	; 63
         UART_TxTail = tmptail;
- 336:	e0 93 86 01 	sts	0x0186, r30	; 0x800186 <UART_TxTail>
+ 396:	e0 93 88 01 	sts	0x0188, r30	; 0x800188 <UART_TxTail>
         /* get one byte from buffer and write it to UART */
         UART0_DATA = UART_TxBuf[tmptail]; /* start transmission */
- 33a:	f0 e0       	ldi	r31, 0x00	; 0
- 33c:	e8 53       	subi	r30, 0x38	; 56
- 33e:	fe 4f       	sbci	r31, 0xFE	; 254
- 340:	80 81       	ld	r24, Z
- 342:	80 93 c6 00 	sts	0x00C6, r24	; 0x8000c6 <__DATA_REGION_ORIGIN__+0x66>
- 346:	05 c0       	rjmp	.+10     	; 0x352 <__vector_19+0x42>
+ 39a:	f0 e0       	ldi	r31, 0x00	; 0
+ 39c:	e6 53       	subi	r30, 0x36	; 54
+ 39e:	fe 4f       	sbci	r31, 0xFE	; 254
+ 3a0:	80 81       	ld	r24, Z
+ 3a2:	80 93 c6 00 	sts	0x00C6, r24	; 0x8000c6 <__DATA_REGION_ORIGIN__+0x66>
+ 3a6:	05 c0       	rjmp	.+10     	; 0x3b2 <__vector_19+0x42>
     }
     else
     {
         /* tx buffer empty, disable UDRE interrupt */
         UART0_CONTROL &= ~_BV(UART0_UDRIE);
- 348:	e1 ec       	ldi	r30, 0xC1	; 193
- 34a:	f0 e0       	ldi	r31, 0x00	; 0
- 34c:	80 81       	ld	r24, Z
- 34e:	8f 7d       	andi	r24, 0xDF	; 223
- 350:	80 83       	st	Z, r24
+ 3a8:	e1 ec       	ldi	r30, 0xC1	; 193
+ 3aa:	f0 e0       	ldi	r31, 0x00	; 0
+ 3ac:	80 81       	ld	r24, Z
+ 3ae:	8f 7d       	andi	r24, 0xDF	; 223
+ 3b0:	80 83       	st	Z, r24
     }
 }
- 352:	ff 91       	pop	r31
- 354:	ef 91       	pop	r30
- 356:	9f 91       	pop	r25
- 358:	8f 91       	pop	r24
- 35a:	0f 90       	pop	r0
- 35c:	0f be       	out	0x3f, r0	; 63
- 35e:	0f 90       	pop	r0
- 360:	1f 90       	pop	r1
- 362:	18 95       	reti
+ 3b2:	ff 91       	pop	r31
+ 3b4:	ef 91       	pop	r30
+ 3b6:	9f 91       	pop	r25
+ 3b8:	8f 91       	pop	r24
+ 3ba:	0f 90       	pop	r0
+ 3bc:	0f be       	out	0x3f, r0	; 63
+ 3be:	0f 90       	pop	r0
+ 3c0:	1f 90       	pop	r1
+ 3c2:	18 95       	reti
 
-00000364 <__umulhisi3>:
- 364:	a2 9f       	mul	r26, r18
- 366:	b0 01       	movw	r22, r0
- 368:	b3 9f       	mul	r27, r19
- 36a:	c0 01       	movw	r24, r0
- 36c:	a3 9f       	mul	r26, r19
- 36e:	70 0d       	add	r23, r0
- 370:	81 1d       	adc	r24, r1
- 372:	11 24       	eor	r1, r1
- 374:	91 1d       	adc	r25, r1
- 376:	b2 9f       	mul	r27, r18
- 378:	70 0d       	add	r23, r0
- 37a:	81 1d       	adc	r24, r1
- 37c:	11 24       	eor	r1, r1
- 37e:	91 1d       	adc	r25, r1
- 380:	08 95       	ret
+000003c4 <__umulhisi3>:
+ 3c4:	a2 9f       	mul	r26, r18
+ 3c6:	b0 01       	movw	r22, r0
+ 3c8:	b3 9f       	mul	r27, r19
+ 3ca:	c0 01       	movw	r24, r0
+ 3cc:	a3 9f       	mul	r26, r19
+ 3ce:	70 0d       	add	r23, r0
+ 3d0:	81 1d       	adc	r24, r1
+ 3d2:	11 24       	eor	r1, r1
+ 3d4:	91 1d       	adc	r25, r1
+ 3d6:	b2 9f       	mul	r27, r18
+ 3d8:	70 0d       	add	r23, r0
+ 3da:	81 1d       	adc	r24, r1
+ 3dc:	11 24       	eor	r1, r1
+ 3de:	91 1d       	adc	r25, r1
+ 3e0:	08 95       	ret
 
-00000382 <_exit>:
- 382:	f8 94       	cli
+000003e2 <_exit>:
+ 3e2:	f8 94       	cli
 
-00000384 <__stop_program>:
- 384:	ff cf       	rjmp	.-2      	; 0x384 <__stop_program>
+000003e4 <__stop_program>:
+ 3e4:	ff cf       	rjmp	.-2      	; 0x3e4 <__stop_program>

@@ -20,6 +20,10 @@
 #define R6	PD6
 #define R7	PD7
 
+#define F_INT 99378 //frequency of generator interrupt
+#define SIN_SAM 512 //number of saved samples of sinus (saved is only first half)
+#define SIN_SAM4 128 //number of saved samples of sinus (saved is only first half)
+
 /* Includes ---------------------------------------------------------------------*/
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -65,9 +69,12 @@ int main(void)
 }
 ISR(TIMER0_COMPA_vect)
 {
-	static uint8_t signal_amplitude = 0b00000000;		// variable for final amplitude
-	//static uint16_t sample_cnt_1 = 0b00000000;
-	static uint8_t lookup_table[128] =
+	
+	static uint8_t signal_amplitude = 0b00000000; //final amplitude	
+	//uint8_t num_of_per_sam_sin = SIN_SAM/ 4; //number of samples of full period of sinus
+		
+	//quarter of sine saved in table
+	static uint8_t lookup_table[SIN_SAM4] =
 	{
 		0b01111111,    // sample1
 		0b10000001,    // sample2
@@ -197,32 +204,45 @@ ISR(TIMER0_COMPA_vect)
 		0b11111110,    // sample126
 		0b11111110,    // sample127
 		0b11111110,    // sample128
-	};
+	};  
 	
-	uint16_t sample_out = 0;
-	static uint16_t sample_cnt_1 = 0;
+	static uint16_t gen_f1 = 1000; //frequency of first signal
+	static uint16_t gen_f2 = 2000; //frequency of second signal
 	
-	static uint16_t generovanafrekvence = 1000;
+	uint16_t sample = F_INT/gen_f1; //num of samples that will by in one period of generated signal
+	uint16_t sample2 = F_INT/gen_f2; //num of samples that will by in one period of generated signal
 	
-	uint16_t sample = 100000/generovanafrekvence;	
-	sample_out = (512*sample_cnt_1/sample);  // vzorek ktery se ma aktualne vycist
+	uint16_t sample_out = 0; // sample that will be read from table
+	uint16_t sample_out2 = 0; // sample that will be read from table
+	
+	static uint16_t sample_cnt_1 = 0; //counter
+	static uint16_t sample_cnt_2 = 0; //counter
 	
 	
+	
+	sample_out = (SIN_SAM*sample_cnt_1/sample); // sample that will be read from table	
+	sample_out2 = (SIN_SAM*sample_cnt_2/sample2); // sample that will be read from table
+	
+	//reseting counter 
 	sample_cnt_1 ++;
 	if(sample_cnt_1 >= sample){
 		sample_cnt_1 = 0;		
 	}
+	//reseting counter 
+	sample_cnt_2 ++;
+	if(sample_cnt_2 >= sample2){
+		sample_cnt_2 = 0;
+	}
 	
-	//signal_amplitude = sample_out/2;
-	signal_amplitude = sinus_gen(&lookup_table, sample_out);
+	//signal_amplitude = sample_out/2; //generovani pila
+	signal_amplitude = (sinus_gen(&lookup_table, sample_out) + sinus_gen(&lookup_table, sample_out2))/2; //generovani sinus
+	//if(sample_out2 ==  )
+	//signal_amplitude =  //generovani obdelnik
+		
 	
-	/*
-	sample_cnt_1 ++;
-	if(sample_cnt_1 > 512)
-		sample_cnt_1 = 0;
-	*/
 		
 	//GPIO_toggle(&PORTC, PC0);
+	
 	
 	PORTB = signal_amplitude & 0b00111111;
 	PORTD = signal_amplitude & 0b11000000;
