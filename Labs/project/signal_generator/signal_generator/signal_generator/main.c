@@ -29,6 +29,7 @@
 #include "uart.h"
 #include "lcd.h"
 #include "signal_generator.h"
+#include "sinus_gen.h"
 
 
 
@@ -222,7 +223,7 @@ static uint8_t lookup_table[128] =
 		// return amplitude value based on currently pressed button
 		
 		//signal_amplitude = (sample_cnt_1);				  // sawwtooth signal generation
-		signal_amplitude = sinus_gen(&sinus_table, gen_sig_sample_id(&sample_cnt_1, 1000));	  // sinus gegeration test
+		signal_amplitude = sinus_gen(&lookup_table, gen_sig_sample_id(&sample_cnt_1, 1000));	  // sinus gegeration test
 		//keys are index from 0 to 15, thus row frquency (index 0-3) is given by: key/4; and and column frequency (index 4-7)  is given by: 4 + key % 4;
 		//signal_amplitude = (sinus_table[gen_sig_sample_id(&sample_cnt_1, &samples_set[key/4])] + sinus_table[gen_sig_sample_id(&sample_cnt_2, &samples_set[4 + (key % 4)])])/2;  
 		sample_cnt_1 = sample_cnt_1 + 1;

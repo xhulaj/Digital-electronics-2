@@ -10,5 +10,7 @@ main.c
 
 signal_generator.c
 
+sinus_gen.c
+
 uart.c
 
