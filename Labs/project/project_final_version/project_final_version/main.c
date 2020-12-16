@@ -11,16 +11,16 @@
 #endif
 #define COMP_REG_A_MASK 0b10100000;
 
-#define R0	PB0
-#define R1	PB1
+#define R0	PD3
+#define R1	PD0
 #define R2	PB2
 #define R3	PB3
 #define R4	PB4
 #define R5	PB5
-#define R6	PD6
-#define R7	PD7
+#define R6	PD1
+#define R7	PD2
 
-#define F_INT 99378 //frequency of generator interrupt
+#define F_INT 100000 //frequency of generator interrupt 99378
 #define SIN_SAM 512 //number of saved samples of sinus (saved is only first half)
 #define SIN_SAM4 128 //number of saved samples of sinus (saved is only first half)
 
@@ -35,6 +35,11 @@
 #include "sinus_gen.h"
 #include "debounce.h"
 
+	uint8_t button = 0;			// temporary variable for setting frequency
+	uint16_t gen_f1 = 1000; //frequency of first signal
+	uint16_t gen_f2 = 1336; //frequency of second signal
+
+	
 int main(void)
 {
 		/* ADC settings ------------------------------------------------------
@@ -70,14 +75,12 @@ int main(void)
 	TIM0_overflow_16us();
 	TIM0_CTC_A_interrupt_enable();	// Interrupt enable
 	OCR0A = COMP_REG_A_MASK;		// Set Compare register A mask for 1 MHz frequency
-	GPIO_config_output(&DDRC, PC0);
-	GPIO_write_low(&PORTC, PC0);
 	
 	// SET output pins for R2R ladder
-	GPIO_config_output(&DDRB, R0);
-	GPIO_write_low(&PORTB, R0);
-	GPIO_config_output(&DDRB, R1);
-	GPIO_write_low(&PORTB, R1);
+	GPIO_config_output(&DDRD, R0);
+	GPIO_write_low(&PORTD, R0);
+	GPIO_config_output(&DDRD, R1);
+	GPIO_write_low(&PORTD, R1);
 	GPIO_config_output(&DDRB, R2);
 	GPIO_write_low(&PORTB, R2);
 	GPIO_config_output(&DDRB, R3);
@@ -91,6 +94,11 @@ int main(void)
 	GPIO_config_output(&DDRD, R7);
 	GPIO_write_low(&PORTD, R7);
 	
+	/* Managing process ---------------------------------------------*/
+	// Initialize LCD display
+	lcd_init(LCD_DISP_ON);
+	lcd_gotoxy(0, 0); lcd_puts("FREQ1:");
+	lcd_gotoxy(0, 1); lcd_puts("FREQ2:");
     // Enables interrupts by setting the global interrupt mask
     sei();
 	while (1)
@@ -99,7 +107,15 @@ int main(void)
 	}
 }
 ISR(TIMER1_OVF_vect)
-{	
+{
+	char lcd_str_1 = "    ";
+	char lcd_str_2 = "    ";
+	itoa(gen_f1, lcd_str_1, 10);
+	itoa(gen_f2, lcd_str_2, 10);
+	lcd_gotoxy(10,0);
+	lcd_puts(lcd_str_1);
+	lcd_gotoxy(10,1);
+	lcd_puts(lcd_str_2);
 	// Start ADC conversion
 	ADCSRA |= (1 << ADSC);
 }
@@ -107,7 +123,7 @@ ISR(ADC_vect)
 {
 	//clear decimal and hex position
 	uint16_t value = ADC;
-		
+	
 	//button states history (all of them has not yet been pushed) 
 	static uint16_t button_history[16] = { 
 		0xFFFF,0xFFFF,0xFFFF,0xFFFF,
@@ -122,7 +138,7 @@ ISR(ADC_vect)
 	button_history[i] |= 1; //set current state as not pushed in button history
 	}
 			
-    //################################## rozpoznani tlacitek
+    /* Button recognition ------------------------------------------------------------*/
 	if (value > 720)
 	{				
 		//uart_puts("NONE");		
@@ -134,6 +150,8 @@ ISR(ADC_vect)
 		if (is_button_pressed(&button_history[0])) //button is pressed if it is not bounce or glitch
 		{
 			uart_puts("1"); //send pushed key on UART		
+			gen_f1 = 810;
+			gen_f2 = 1209;
 		}		
 	}
 	else if (660 >= value && value > 610) //4
@@ -141,7 +159,9 @@ ISR(ADC_vect)
 		button_history[1] &= ~(1<<0); 
 		if (is_button_pressed(&button_history[1]))
 		{
-			uart_puts("4");		
+			uart_puts("4");	
+			gen_f1 = 880;
+			gen_f2 = 1209;
 		}		
 	}
 	else if (610 >= value && value > 570) //7
@@ -150,6 +170,8 @@ ISR(ADC_vect)
 		if (is_button_pressed(&button_history[2]))
 		{
 			uart_puts("7");
+			gen_f1 = 950;
+			gen_f2 = 1209;
 		}
 	}
 	else if (570 >= value && value > 530) //*
@@ -158,6 +180,8 @@ ISR(ADC_vect)
 		if (is_button_pressed(&button_history[3]))
 		{
 			uart_puts("*");
+			gen_f1 = 1020;
+			gen_f2 = 1209;
 		}
 	}
 	else if (530 >= value && value > 490) //2
@@ -166,6 +190,8 @@ ISR(ADC_vect)
 		if (is_button_pressed(&button_history[4]))
 		{
 			uart_puts("2");
+			gen_f1 = 810;
+			gen_f2 = 1336;
 		}
 	}
 	else if (490 >= value && value > 460) //3
@@ -174,6 +200,8 @@ ISR(ADC_vect)
 		if (is_button_pressed(&button_history[5]))
 		{
 			uart_puts("3");
+			gen_f1 = 810;
+			gen_f2 = 1477;
 		}
 	}
 	else if (460 >= value && value > 430) //A
@@ -182,6 +210,8 @@ ISR(ADC_vect)
 		if (is_button_pressed(&button_history[6]))
 		{
 			uart_puts("A");
+			gen_f1 = 810;
+			gen_f2 = 1633;
 		}
 	}
     else if (430 >= value && value > 390) //5
@@ -190,6 +220,8 @@ ISR(ADC_vect)
 		if (is_button_pressed(&button_history[7]))
 		{
 			uart_puts("5");
+			gen_f1 = 880;
+			gen_f2 = 1336;
 		}
     }
 	else if (390 >= value && value > 340) //6
@@ -198,6 +230,8 @@ ISR(ADC_vect)
 		if (is_button_pressed(&button_history[8]))
 		{
 			uart_puts("6");
+			gen_f1 = 880;
+ 			gen_f2 = 1477;
 		}
 	}
 	else if (340 >= value && value > 290) //B
@@ -206,6 +240,8 @@ ISR(ADC_vect)
 		if (is_button_pressed(&button_history[9]))
 		{
 			uart_puts("B");
+			gen_f1 = 880;
+			gen_f2 = 1633;
 		}
 	}
 	else if (290 >= value && value > 230) //8
@@ -214,6 +250,8 @@ ISR(ADC_vect)
 		if (is_button_pressed(&button_history[10]))
 		{
 			uart_puts("8");
+			gen_f1 = 950;
+			gen_f2 = 1336;
 		}
 	}
 	else if (230 >= value && value > 190) //9
@@ -222,6 +260,8 @@ ISR(ADC_vect)
 		if (is_button_pressed(&button_history[11]))
 		{
 			uart_puts("9");
+			gen_f1 = 950;
+			gen_f2 = 1477;
 		}
 	}
 	else if (190 >= value && value > 150) //0
@@ -230,6 +270,8 @@ ISR(ADC_vect)
 		if (is_button_pressed(&button_history[12]))
 		{
 			uart_puts("0");
+			gen_f1 = 1020;
+			gen_f2 = 1336;
 		}
 	}
 	else if (150 >= value && value > 110) //C
@@ -238,6 +280,8 @@ ISR(ADC_vect)
 		if (is_button_pressed(&button_history[13]))
 		{
 			uart_puts("C");
+			gen_f1 = 950;
+			gen_f2 = 1633;
 		}
 	}
 	else if (110 >= value && value > 50) //#
@@ -246,6 +290,8 @@ ISR(ADC_vect)
 		if (is_button_pressed(&button_history[14]))
 		{
 			uart_puts("#");
+			gen_f1 = 1020;
+			gen_f2 = 1477;
 		}
 	}
 	else if (50 >= value && value >= 0) //D
@@ -254,6 +300,8 @@ ISR(ADC_vect)
 		if (is_button_pressed(&button_history[15]))
 		{
 			uart_puts("D");
+			gen_f1 = 1020;
+			gen_f2 = 1633;
 		}
 	}
 }
@@ -396,8 +444,6 @@ ISR(TIMER0_COMPA_vect)
 		0b11111110,    // sample128
 	};
 	
-	static uint16_t gen_f1 = 1000; //frequency of first signal
-	static uint16_t gen_f2 = 2000; //frequency of second signal
 	
 	uint16_t sample = F_INT/gen_f1; //num of samples that will by in one period of generated signal
 	uint16_t sample2 = F_INT/gen_f2; //num of samples that will by in one period of generated signal
@@ -429,8 +475,8 @@ ISR(TIMER0_COMPA_vect)
 	//if(sample_out2 ==  )
 	//signal_amplitude =  //generovani obdelnik
 	
-	GPIO_set_pin(&PORTB, R0, bit_val(signal_amplitude, 1));
-	GPIO_set_pin(&PORTB, R1, bit_val(signal_amplitude, 2));
+	GPIO_set_pin(&PORTD, R0, bit_val(signal_amplitude, 1));
+	GPIO_set_pin(&PORTD, R1, bit_val(signal_amplitude, 2));
 	GPIO_set_pin(&PORTB, R2, bit_val(signal_amplitude, 3));
 	GPIO_set_pin(&PORTB, R3, bit_val(signal_amplitude, 4));
 	GPIO_set_pin(&PORTB, R4, bit_val(signal_amplitude, 5));

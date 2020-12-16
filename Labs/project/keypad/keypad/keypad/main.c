@@ -35,9 +35,10 @@ int main(void)
 	GPIO_write_high(&PORTC, PC1);
 	*/
 	
-	//##########################################################ADC settings
-    // Configure ADC to convert PC0[A0] analog value
-    // Set ADC reference to AVcc
+	/* ADC settings ------------------------------------------------------
+    Configure ADC to convert PC0[A0] analog value
+    Set ADC reference to AVcc
+	*/
     ADMUX |= (1 << REFS0);
     ADMUX &= ~(1 << REFS1);
     
@@ -52,7 +53,7 @@ int main(void)
 
     // Set clock prescaler to 128
     ADCSRA |= ((1 << ADPS0)|(1 << ADPS1)|(1 << ADPS2));
-	//##########################################################ADC settings
+	/* ADC settings ----------------------------------------------------------*/
 	
     //timer for checking state of buttons every 4ms 
 	TIM1_overflow_4ms(); //1s for debugging

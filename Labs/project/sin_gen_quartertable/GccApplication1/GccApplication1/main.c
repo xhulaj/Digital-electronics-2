@@ -20,7 +20,7 @@
 #define R6	PD6
 #define R7	PD7
 
-#define F_INT 99378 //frequency of generator interrupt
+#define F_INT 100000 //frequency of generator interrupt
 #define SIN_SAM 512 //number of saved samples of sinus (saved is only first half)
 #define SIN_SAM4 128 //number of saved samples of sinus (saved is only first half)
 
@@ -41,8 +41,6 @@ int main(void)
 	TIM0_overflow_16us();
 	TIM0_CTC_A_interrupt_enable();	// Interrupt enable
 	OCR0A = COMP_REG_A_MASK;		// Set Compare register A mask for 1 MHz frequency
-	GPIO_config_output(&DDRC, PC0);
-	GPIO_write_low(&PORTC, PC0);
 	
 	// SET output pins for R2R ladder
 	GPIO_config_output(&DDRB, R0);
@@ -238,7 +236,7 @@ ISR(TIMER0_COMPA_vect)
 	
 	//signal_amplitude = sample_out/2; //generovani pila
 	signal_amplitude = (sinus_gen(&lookup_table, sample_out) + sinus_gen(&lookup_table, sample_out2))/2; //generovani sinus
-	//if(sample_out2 ==  )
+	
 	//signal_amplitude =  //generovani obdelnik
 	
 	GPIO_set_pin(&PORTB, R0, bit_val(signal_amplitude, 1));

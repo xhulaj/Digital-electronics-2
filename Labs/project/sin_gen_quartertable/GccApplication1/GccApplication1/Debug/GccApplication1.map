@@ -277,7 +277,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x4f4
+.text           0x00000000      0x4ba
  *(.vectors)
  .vectors       0x00000000       0x68 D:/AtmelStudio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega328p/avr5/crtatmega328p.o
                 0x00000000                __vector_default
@@ -372,28 +372,28 @@ END GROUP
                 0x000000d8                GPIO_set_pin
  .text.bit_val  0x0000010e       0x12 gpio.o
                 0x0000010e                bit_val
- .text.main     0x00000120       0xe4 main.o
+ .text.main     0x00000120       0xd0 main.o
                 0x00000120                main
  .text.__vector_14
-                0x00000204      0x1c4 main.o
-                0x00000204                __vector_14
+                0x000001f0      0x19e main.o
+                0x000001f0                __vector_14
  .text.sinus_gen
-                0x000003c8       0x5a sinus_gen.o
-                0x000003c8                sinus_gen
+                0x0000038e       0x5a sinus_gen.o
+                0x0000038e                sinus_gen
  .text.__vector_18
-                0x00000422       0x5c uart.o
-                0x00000422                __vector_18
+                0x000003e8       0x5c uart.o
+                0x000003e8                __vector_18
  .text.__vector_19
-                0x0000047e       0x54 uart.o
-                0x0000047e                __vector_19
+                0x00000444       0x54 uart.o
+                0x00000444                __vector_19
  .text.libgcc.mul
-                0x000004d2       0x1e d:/atmelstudio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_umulhisi3.o)
-                0x000004d2                __umulhisi3
-                0x000004f0                . = ALIGN (0x2)
+                0x00000498       0x1e d:/atmelstudio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_umulhisi3.o)
+                0x00000498                __umulhisi3
+                0x000004b6                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x000004f0        0x0 d:/atmelstudio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
-                0x000004f0                _exit
-                0x000004f0                exit
+ .fini9         0x000004b6        0x0 d:/atmelstudio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+                0x000004b6                _exit
+                0x000004b6                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -412,11 +412,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x000004f0        0x4 d:/atmelstudio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+ .fini0         0x000004b6        0x4 d:/atmelstudio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x000004f4                _etext = .
+                0x000004ba                _etext = .
 
-.data           0x00800100       0x80 load address 0x000004f4
+.data           0x00800100       0x80 load address 0x000004ba
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -456,8 +456,8 @@ END GROUP
                 0x008001ca       0x40 uart.o
  *(COMMON)
                 0x0080020a                PROVIDE (__bss_end, .)
-                0x000004f4                __data_load_start = LOADADDR (.data)
-                0x00000574                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x000004ba                __data_load_start = LOADADDR (.data)
+                0x0000053a                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x0080020a        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
@@ -545,13 +545,13 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x11f7
+.debug_info     0x00000000     0x11bb
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x5f4 D:/AtmelStudio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega328p/avr5/crtatmega328p.o
  .debug_info    0x000005f4      0x297 gpio.o
- .debug_info    0x0000088b      0x593 main.o
- .debug_info    0x00000e1e       0xcd sinus_gen.o
- .debug_info    0x00000eeb      0x30c uart.o
+ .debug_info    0x0000088b      0x557 main.o
+ .debug_info    0x00000de2       0xcd sinus_gen.o
+ .debug_info    0x00000eaf      0x30c uart.o
 
 .debug_abbrev   0x00000000      0x901
  *(.debug_abbrev)
@@ -561,20 +561,20 @@ END GROUP
  .debug_abbrev  0x00000765       0x8b sinus_gen.o
  .debug_abbrev  0x000007f0      0x111 uart.o
 
-.debug_line     0x00000000      0x721
+.debug_line     0x00000000      0x715
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x133 D:/AtmelStudio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega328p/avr5/crtatmega328p.o
  .debug_line    0x00000133      0x16f gpio.o
- .debug_line    0x000002a2      0x1b3 main.o
- .debug_line    0x00000455       0xbb sinus_gen.o
- .debug_line    0x00000510      0x211 uart.o
+ .debug_line    0x000002a2      0x1a7 main.o
+ .debug_line    0x00000449       0xbb sinus_gen.o
+ .debug_line    0x00000504      0x211 uart.o
 
-.debug_frame    0x00000000      0x240
+.debug_frame    0x00000000      0x238
  *(.debug_frame)
  .debug_frame   0x00000000       0xa4 gpio.o
- .debug_frame   0x000000a4       0x98 main.o
- .debug_frame   0x0000013c       0x24 sinus_gen.o
- .debug_frame   0x00000160       0xe0 uart.o
+ .debug_frame   0x000000a4       0x90 main.o
+ .debug_frame   0x00000134       0x24 sinus_gen.o
+ .debug_frame   0x00000158       0xe0 uart.o
 
 .debug_str      0x00000000      0x5c0
  *(.debug_str)
@@ -588,12 +588,12 @@ END GROUP
  .debug_str     0x000004cb       0xf5 uart.o
                                 0x29b (size before relaxing)
 
-.debug_loc      0x00000000      0x6de
+.debug_loc      0x00000000      0x693
  *(.debug_loc)
  .debug_loc     0x00000000      0x135 gpio.o
- .debug_loc     0x00000135      0x192 main.o
- .debug_loc     0x000002c7       0xe4 sinus_gen.o
- .debug_loc     0x000003ab      0x333 uart.o
+ .debug_loc     0x00000135      0x147 main.o
+ .debug_loc     0x0000027c       0xe4 sinus_gen.o
+ .debug_loc     0x00000360      0x333 uart.o
 
 .debug_macinfo
  *(.debug_macinfo)
